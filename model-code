@@ -1,0 +1,2820 @@
+//01-C++基础
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int a,b,c; cin>>a>>b>>c;
+    cout<<a*0.2+b*0.3+c*0.5;
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int a,b,res=0,maxn=0;
+    for(int i=1;i<=7;i++){
+        cin>>a>>b;
+        if(a+b>8&&a+b>maxn){
+            res=i; maxn=a+b;
+        }
+    }
+    cout<<res;
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int n; cin>>n;
+    int res=0;
+    int mid=n&1?n/2+1:n/2;
+    for(int i=1;i<=n;i++){
+        if((i*i)%n<mid) res++;
+    }
+    cout<<res;
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+bool check(int n){
+    while(n){
+        int temp=n%10;
+        switch(temp){
+            case 0: case 1: case 2: case 9:
+            return true;
+        }
+        n/=10;
+    }
+    return false;
+}
+int main(){
+    int n; cin>>n;
+    long long sum=0;
+    for(int i=1;i<=n;i++){
+        if(check(i)) sum+=i;
+    }
+    cout<<sum<<endl;
+    return 0;
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    string s; cin>>s;
+    int day=(s[3]-'0')*10+s[4]-'0', month;
+    switch(s[0]){
+        case 'J':
+            if(s[1]=='a') month=1;
+            else if(s[2]=='n') month=6;
+            else month=7;
+            break;
+        case 'F':
+            month=2; break;
+        case 'M':
+            if(s[2]=='r') month=3;
+            else month=5;
+            break;
+        case 'A':
+            if(s[1]=='p') month=4;
+            else month=8;
+            break;
+        case 'S':
+            month=9; break;
+        case 'O':
+            month=10; break;
+        case 'N':
+            month=11; break;
+        case 'D':
+            month=12; break;       
+    }
+    cout<<month<<" "<<day;
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    string s; cin>>s;
+    for(int i=0;i<s.size();i++){
+        if(s[i]>='a'&&s[i]<='z') s[i]-=32;
+    }
+    cout<<s;
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int L,R; cin>>L>>R;
+    int res=(R+1)/2;
+    res+=R/4;
+    res-=L/2;
+    res-=(L-1)/4;
+    cout<<res;
+    return 0;
+}
+
+//H
+#include<bits/stdc++.h>
+using namespace std;
+inline int read(){
+    register int x=0,f=1;
+    register char c=getchar();
+    while(c<'0'||c>'9') {if(c=='-') f=-1; c=getchar();}
+    while(c>='0'&&c<='9') {x=(x<<1)+(x<<3)+(c^48); c=getchar();}
+    return x*f;
+}
+struct node{
+    int y,m,d;
+}res[3];
+bool cmp(node a,node b){
+    if(a.y!=b.y) return a.y<b.y;
+    if(a.m!=b.m) return a.m<b.m;
+    return a.d<b.d;
+}
+bool check(int yy,int mm,int dd){
+    if(mm>12||dd>31||mm<1||dd<1) return false;
+    switch(mm){
+        case 2:
+            int temp;
+            if(yy>60) temp=1900+yy;
+            else temp=2000+yy;
+            if(temp%4==0){
+                if(dd>29) return false;
+            }
+            else if(dd>28) return false;
+            break;
+        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+            if(dd>31) return false;
+            break;
+        case 4: case 6: case 9: case 11:
+            if(dd>30) return false;
+            break;
+    }
+}
+int cnt=0;
+void add_data(int a,int b,int c){
+    if(check(a,b,c)){
+        res[cnt].m=b; res[cnt].d=c;
+        if(a>=60) res[cnt].y=1900+a;
+        else res[cnt].y=2000+a;
+        cnt++;
+    }
+}
+int flag[3]={false};
+int main(){
+    int a,b,c;
+    a=read(); b=read(); c=read();
+    add_data(a,b,c); add_data(c,a,b); add_data(c,b,a);
+    sort(res+0,res+cnt,cmp);
+    for(int i=1;i<cnt;i++){
+        if(res[i].y==res[i-1].y&&res[i].m==res[i-1].m&&res[i].d==res[i-1].d)
+            flag[i]=true;
+    }
+    for(int i=0;i<cnt;i++){
+        if(flag[i]) continue;
+        printf("%d-",res[i].y);
+        if(res[i].m<10) printf("0");
+        printf("%d-",res[i].m);
+        if(res[i].d<10) printf("0");
+        printf("%d\n",res[i].d);
+    }
+    return 0;
+}
+
+//02-前缀和与差分
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+int a[105];
+int main(){
+    int n; cin>>n;
+    for(int i=1;i<=n;i++) cin>>a[i];
+    for(int i=n;i>=1;i--) cout<<a[i]<<" ";
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+int a[10005],s[1005];
+int main(){
+    int n; cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>a[i];
+        s[i]=s[i-1]+a[i];
+    }
+    int m,x,y; cin>>m;
+    for(int i=1;i<=m;i++){
+        cin>>x>>y;
+        cout<<s[y]-s[x-1]<<endl;
+    }
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+int a[1005],s[1005]; 
+int main(){
+    int maxn=0,ans=0;
+    int n,m,x,y; cin>>n>>m;
+    for(int i=1;i<=n;i++){
+        cin>>x>>y;
+        a[x]+=y;
+        maxn=max(maxn,x);
+    }
+    for(int i=1;i<=maxn;i++){
+        s[i]=s[i-1]+a[i];
+        ans=max(ans,s[i]-s[i-m]);
+    }
+    cout<<ans;
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+int a[130][130],s[130][130],qz[130][130];
+int main(){
+    int n; cin>>n;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>a[i][j];
+            qz[i][j]=qz[i][j-1]+a[i][j];
+            s[i][j]=s[i-1][j]+qz[i][j];
+        }
+    }
+    int ans=0;
+    for(int x1=1;x1<=n;x1++){
+        for(int y1=1;y1<=n;y1++){
+            for(int x2=1;x2<=n;x2++){
+                for(int y2=1;y2<=n;y2++){
+                    if(x2<x1||y2<y1) continue;
+                    ans=max(ans,s[x2][y2]+s[x1-1][y1-1]-s[x2][y1-1]-s[x1-1][y2]);
+                }
+            }
+        }
+    }
+    cout<<ans;
+    return 0;
+}
+
+//03-基础数论
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+ll a,p,k;
+int main(){
+    scanf("%lld%lld%lld",&a,&p,&k);
+    printf("%lld^%lld mod %lld=",a,p,k);
+    ll ans=1,w=a; a%=k;
+    while(p){
+        if(p&1){
+            ans=ans*w%k;
+        }  
+        w=w*w%k;
+        p>>=1;
+    }printf("%lld",ans%k);
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+long long mod=1000000007;
+long long n,k;
+struct sq{
+    long long num[102][102];
+    sq(){memset(num,0,sizeof(num));}
+};
+sq operator *(const sq &a,const sq &b){
+    sq ans;
+    for(int k=1;k<=n;k++){
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                ans.num[i][j]=(ans.num[i][j]+a.num[i][k]*b.num[k][j]%mod)%mod;
+            }
+        }
+    }
+    return ans;
+}
+sq x,y,ans;
+int main(){
+    int n,k; cin>>n>>k;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>x.num[i][j];
+        }
+    }
+    for(int i=1;i<=n;i++){
+        y.num[i][i]=1;
+        ans.num[i][i]=1;
+    }
+    while(k){
+        if(k&1) ans=ans*x;
+        x=x*x;
+        k>>=1;
+    }
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            printf("%lld ",ans.num[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+ 
+//C
+#include<bits/stdc++.h>
+#define ll long long 
+using namespace std;
+ll a,b,mod=19260817;
+inline ll read(){
+    ll ans=0; char s=getchar();
+    while(s>'9'||s<'0') s=getchar();
+    while(s>='0'&&s<='9'){
+        ans=((ans<<1)%mod+(ans<<3)%mod+(s^15))%mod;
+        s=getchar();
+    }
+    return ans;
+}
+ll quick_m(ll i,ll n){
+    i%=mod; ll ans=1,ds=i;
+    while(n){
+        if(n&1) ans=ans*ds%mod;
+        ds=ds*ds%mod;
+        n>>=1;
+    }
+    return ans%mod;
+}
+int main(){
+    scanf("%lld%lld",&a,&b);
+    if(b==0) {printf("Angry!"); return 0;}
+    printf("%lld",a*quick_m(b,mod-2)%mod);
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    int a; cin>>a;
+    for(int i=2;i*i<=a;i++){
+        if(a%i==0){
+            cout<<a/i;
+            return 0;
+        }
+    }
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+int n,a;
+int main(){
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>a;
+        bool f=1;
+        for(int j=2;j*j<=a;j++){
+            if(a%j==0) {f=0; break;}
+        }
+        if(f==1&&a!=1) printf("%d ",a);
+    }
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+bool ans[1000000002];
+int z[6000005],p;
+int n,m,a;
+int main(){
+    cin>>n>>m;
+    for(int i=2;i<=n;i++){
+        if(!ans[i]) z[++p]=i;
+        for(int j=1;j<=p&&z[j]*i<=n;j++){
+            ans[i*z[j]]=1;
+            if(i%z[j]==0) break;
+        }
+    }
+    for(int i=1;i<=m;i++){
+        cin>>a;
+        printf("%d\n",z[a]);
+    }
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+ll gcd(ll x,ll y){return !y?x:gcd(y,x%y);}
+ll lcm(ll x,ll y){return x*y/gcd(x,y);}
+int main(){
+    ll a,b,c;
+    scanf("%lld%lld%lld",&a,&b,&c);
+    printf("%lld",lcm(a,lcm(b,c)));
+    return 0;
+}
+
+//H
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+ll gcd(ll x,ll y){return !y?x:gcd(y,x%y);}
+int main(){
+    ll a,b,ans=0;
+    scanf("%lld%lld",&a,&b);
+    if(a==b) ans--;
+    for(int i=1;i*i<=a*b;i++){
+        if(a*b%i==0&&gcd(i,a*b/i)==a) ans+=2;
+    }
+    printf("%lld",ans);
+}
+
+//I
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+int n,p,inv[3000005];
+int main(){
+    cin>>n>>p;
+    inv[0]=1; inv[1]=1;
+    printf("1\n");
+    for(int i=2;i<=n;i++){
+        inv[i]=(ll)inv[p%i]*(p-p/i)%p;
+        printf("%d\n",inv[i]);
+    }
+    return 0;
+}
+
+//J
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int N=1e7+10;
+int T;
+ll n,m,mod;
+int z[N],p;
+bool vis[N];
+void get_prime(){
+    for(int i=2;i<N;i++){
+        if(!vis[i]) z[++p]=i;
+        for(int j=1;j<=p&&i*z[j]<N;j++){
+            vis[i*z[j]]=1;
+            if(i*z[j]==0) break;
+        }
+    }
+}
+ll inv[N],mul[N],pt[N];
+int main(){
+    scanf("%d%lld",&T,&mod);
+    get_prime();
+    inv[0]=1;inv[1]=1;
+    for(int i=2;i<N;i++){
+        inv[i]=inv[mod%i]*(mod-mod/i)%mod;
+    }
+    mul[1]=1;
+    for(int i=2;i<N;i++){
+        mul[i]=mul[i-1]*i%mod;
+    }
+    pt[1]=1;
+    for(int i=2;i<N;i++){
+        if(!vis[i]){
+            pt[i]=pt[i-1]*(i-1)%mod*inv[i%mod]%mod;
+        }
+        else pt[i]=pt[i-1];
+    }
+    while(T--){
+        cin>>n>>m;
+        printf("%lld\n",mul[n]*pt[m]%mod);
+    }
+    return 0;
+}
+
+//K
+#include<bits/stdc++.h>
+using namespace std;
+void gcd(int a,int b,int &x,int &y){
+    if(!b){
+        x=1;y=0;
+        return 0;
+    }
+    gcd(b,a%b,x,y){
+        int xx=y,yy=x-a/b*y;
+        x=xx;y=yy;
+        return;
+    }
+}
+int a,b,x,y;
+int main(){
+    cin>>a>>b;
+    gcd(a,b,x,y);
+    printf("%d",(x+b)%b);
+}
+
+//04-STL
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    stack<int>s;
+    int temp;
+    for(;;){
+        cin>>temp;
+        if(temp) s.push(temp);
+        else break;
+    }
+    while(!s.empty()){
+        cout<<s.top()<<" ";
+        s.pop();
+    }
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+string s;
+stack<int>s;
+int main(){
+    cin>>s;
+    for(int i=0;s[i]!='@';i++){
+        if(s[i]=='('){
+            s.push(1);
+        }
+        else if(s[i]==')'){
+            if(s.empty()){
+                cout<<"NO";
+                return 0;
+            }
+            s.pop();
+        }
+    }
+    if(s.empty()) cout<<"YES";
+    else cout<<"NO";
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+string s;
+stack<int>st;
+int main(){
+    int last=0,res=0,temp1,temp2;
+    cin>>s;
+    for(int i=0;s[i]!='@';i++){
+        switch(s[i]){
+            case '.':
+                st.push(last); last=0; break;
+            case '+':
+                temp1=st.top(); st.pop();
+                temp2=st.top(); st.pop();
+                st.push(temp1+temp2);
+                break;
+            case '-':
+                temp1=st.top(); st.pop();
+                temp2=st.top(); st.pop();
+                st.push(temp2-temp1);
+                break;
+            case '*':
+                temp1=st.top(); st.pop();
+                temp2=st.top(); st.pop();
+                st.push(temp1*temp2);
+                break;
+            case '/':
+                temp1=st.top(); st.pop();
+                temp2=st.top(); st.pop();
+                st.push(temp2/temp1);
+                break;
+            default:
+                last=last*10+s[i]-'0';
+                break;
+        }
+    }
+    cout<<st.top();
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+queue<int>qu;
+int main(){
+    int m,n,i,temp; cin>>n>>m;
+    cin>>n>>m;
+    for(int i=1;i<=n;i++) qu.push(i);
+    while(!qu.empty()){
+        for(i=1;i<m;i++){
+            temp=qu.front();
+            qu.pop();
+            qu.push(temp);
+        }
+        cout<<qu.front()<<" "; 
+        qu.pop();
+    }
+    return 0;
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    queue<int>a;
+    int hash[1023]={0};
+    int m,n,temp,num;
+    cin>>m>>n;
+    while(n--){
+        cin>>temp;
+        if(!hash[temp]){
+            hash[temp]=1;
+            num++;
+            q.push(temp);
+            if(a.size()>m){
+                hash[a.front()]=0;
+                a.pop();
+            }
+        }
+    }
+    cout<<num;
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+priority_queue<int,vector<int>,greater<int>>pq;
+int main(){
+    cin>>n;
+    while(n--){
+        cin>>temp;
+        pq.push(temp);
+    }
+    long long res=0;
+    while(pq.size()>1){
+        int temp=pq.top(); pq.pop();
+        temp+=pq.top(); pq.pop();
+        res+=temp;
+        pq.push(temp);
+    }
+    cout<<res;
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+priority_queue<int>q1;
+priority_queue<int,vector<int>,greater<int>>q2;
+int mid=0,num[N];
+int main(){
+    int n;
+    for(int i=1;i<=n;i++) cin>>num[i];
+    mid=num[1]; cout<<mid<<endl;
+    for(int i=2;i<=n;i++){
+        if(num[i]>mid){
+            q2.push(num[i]);
+        }
+        else q1.push(num[i]);
+        if(i&1){
+            while(q1.size()>q2.size()){
+                q2.push(mid);
+                mid=q1.top(); q1.pop();
+            }
+            while(q1.size()<q2.size()){
+                q1.push(mid);
+                mid=q2.top(); q2.pop();
+            }
+            cout<<mid<<endl;
+        }
+    }
+    return 0;
+}
+
+//05-贪心
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+struct node{
+    int m,v;
+    double k;
+};
+struct cmp{
+    bool operator()(node a,node b){
+        if(x.k==y.k) return x.m<y.m;
+        return x.k<y.k;
+    }
+};
+priority_queue<node,vector<node>,cmp>pq;
+int main(){
+    int n,t; cin>>n>>t;
+    node temp;
+    for(int i=1;i<=n;i++){
+        cin>>temp.m>>temp.v;
+        temp.k=(double)temp.v/temp.m;
+        pq.push(temp);
+    }
+    double res=0;
+    while(t&&pq.size()){
+        if(t<pq.top().m){
+            res+=(double)t*pq.top().k; t=0;
+            break;
+        }
+        else{
+            t-=pq.top().m;
+            res+=pq.top().v;
+            pq.pop();
+        }
+    }
+    printf("%.2f",res);
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e6+10;
+struct node{
+    int a,b;
+}con[N];
+bool cmp(node x,node y){
+    if(x.b==y.b) return x.a<y.a;
+    return x.b<y.b;
+}
+int main(){
+    int res=0,last=0;
+    int n; cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>con[i].a>>con[i].b;
+    }
+    sort(con+1,con+n+1,cmp);
+    for(int i=1;i<=n;i++){
+        if(con[i].a>=last){
+            res++; last=con[i].b;
+        }
+    }
+    cout<<res;
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+int a[65];
+int main(){
+    int n; cin>>n;
+    int sum=0,res1=0,res2=0;
+    for(int i=1;i<=n;i++){
+        cin>>a[i];
+        sum+=a[i];
+    }
+    int L,R; cin>>L>>R;
+    if(sum<L*n||sum>R*n){
+        cout<<-1<<endl; return 0;
+    }
+    for(int i=1;i<=n;i++){
+        if(a[i]>R) res1+=a[i]-R;
+        else if(a[i]<L) res2+=L-a[i];
+    }
+    cout<<max(res1,res2);
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+const int N=2e5+10;
+const int INF=0x3f3f3f3f;
+int main(){
+    int n,m; cin>>n>>m;
+    int minn=INF,maxn=-INF;
+    long long sum=0;
+    if(m){
+        for(int i=1,temp;i<=n+m+1;i++){
+            cin>>temp;
+            minn=min(minn,temp); maxn=max(maxn,temp);
+            sum+=abs(temp);
+        }
+        if(minn>0) sum-=minn<<1;
+        if(maxn<0) sum+=maxn<<1;
+    }
+    else{
+        for(int i=1;i<=n+m+1;i++){
+            cin>>temp; sum+=temp;
+        }
+    }
+    cout<<sum;
+    return 0;
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+const int N=5e5+5;
+double a[N]={0};
+double pow2(double x){
+    return x*x;
+}
+int main(){
+    int n; double S;
+    cin>>n>>S;
+    for(int i=1;i<=n;i++) cin>>a[i];
+    sort(a+1,a+1+n);
+    double sum=0,ave=S/n;
+    for(int i=1;i<=n&&S;i++){
+        if(a[i]>=S/(n-i+1)){
+            sum+=pow2(S/(n-i+1)-ave)*(n-i+1); S=0; break;
+        }
+        S-=a[i]; sum+=pow2(a[i]-ave);
+    }
+    sum=sqrt(sum/n);
+    printf("%.4f",sum);
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e4+10;
+struct node{
+    int c,b,g,k;
+}a[N];
+int main(){
+    int n; cin>>n;
+    for(int i=1;i<=n;i++) cin>>a[i].c>>a[i].b>>a[i].g>>a[i].k;
+    int x,y; cin>>x>>y;
+    for(int i=n;i>=1;i--){
+        if(x>=a[i].c&&x<a[i].c+a[i].g&&y>=a[i].b&&y<a[i].b+a[i].k){
+            cout<<i; return 0;
+        }
+    }
+    cout<<-1;
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    string s; cin>>s;
+    bool flag=true;
+    char ver;
+    int k=0,b=0;
+    for(int i=0,f=1,last;;i++){
+        if(flag){
+            if(s[i]>='0'&&s[i]<='9'){
+                last=last*10+s[i]-'0';
+            }
+            else if(s[i]>='a'&&s[i]<='z'){
+                ver=s[i];
+                k+=last*f?last*f:1; f=1; last=0;
+            }
+            else{
+                b-=last*f? f=1; last=0;
+                if(s[i]=='-') f=-1;
+                if(s[i]=='=') flag=false;
+            }
+        }
+        else{
+            if(s[i]>='0'&&s[i]<='9'){
+                last=last*10+s[i]-'0';
+            }
+            else if(s[i]>='a'&&s[i]<='z'){
+                ver=s[i];
+                k-=last*f?last*f:1; f=1; last=0;
+            }
+            else{
+                b+=last*f? f=1; last=0;
+                if(s[i]=='-') f=-1;
+                if(s[i]=='\0') break; 
+            }
+        }
+    }
+    res=(double)b/k;
+    printf("%s=%.3f,ver,res);
+    return 0;
+}
+
+//H
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+int num[30]={0};
+int main(){
+    int k; cin>>k;
+    string s; cin>>s;
+    if(s.size()%k){
+        cout<<-1; return 0;
+    }
+    int len=s.size()/k;
+    long long res=0;
+    for(int i=0;i<len;i++){
+        memset(num,0,sizeof(num));
+        for(int j=0;j<k;j++){
+            num[s[j+i*len]-'a']++;
+        }
+        int max_num=0;
+        for(int j=0;j<26;j++){
+            if(num[j]>max_num) max_num=j;
+        }
+        res+=k-num[max_num];
+    }
+    cout<<res;
+    return 0;
+}
+
+//06-二分
+
+//A
+#include <bits/stdc++.h>
+using namespace std;
+int n,m,a[1000005],x;
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=n;i++) cin>>a[i];
+    for(int i=1;i<=m;i++){
+        cin>>x;
+        int l=1,r=n,mid;
+        while(l<=r){
+            mid=(l+r)>>1;
+            if(a[mid]>=x) r=mid;
+            else l=mid+1;
+        }
+        if(a[l]==x) cout<<l;
+        else cout<<-1;
+    }
+    return 0;
+}
+
+//B
+#include <bits/stdc++.h>
+using namespace std;
+double a,b,c,d;
+double f(double x){
+    return a*x*x*x+b*x*x+c*x+d;
+}
+int main(){
+    scanf("%lf%lf%lf%lf".&a,&b,&c,&d);
+    for(int i=-100;i<100;i++){
+        double l=i,r=i+1,mid;
+        if(f(l)==0) {printf("%.2lf",l); continue;}
+        if(f(l)*f(r)<0){
+            while(r-l>=0.001){
+                mid=(l+r)/2;
+                if(f(mid)*f(l)<=0) r=mid;
+                else l=mid;
+            }
+            printf("%.2lf",l);
+        }
+    }
+    return 0;
+}
+
+//C
+#include <bits/stdc++.h>
+using namespace std;
+int n,a[50005],maxx,g;
+bool check(int x){
+    int pre=0,num=0;
+    for(int i=1;i<=n;i++){
+        if(a[i]-pre<x) num++;
+        else pre=a[i];
+    }return num<=g;
+}
+int main(){
+    cin>>maxx>>n>>g;
+    for(int i=1;i<=n;i++) cin>>a[i];
+    a[n+1]=maxx;
+    int l=1,r=maxx,mid,ans=-1;
+    while(l<=r){
+        mid=(l+r)>>1;
+        if(check(mid)) ans=mid; l=mid+1; 
+        else r=mid-1;
+    }
+    cout<<ans;
+    return 0;
+}
+
+//D
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+ll m;
+int n,a[1000005];
+bool check(int x){
+    ll num=0;
+    for(int i=1;i<=n;i++){
+        if(a[i]>x) num+=a[i]-x;
+    }return num<=m;
+}
+int main(){
+    scanf("%d%lld",&n,&m);
+    for(int i=1;i<=n;i++) scanf("%d",&a[i]);
+    int l=0,r=1e9,mid,ans=-1;
+    while(l<=r){
+        mid=(l+r)>>1;
+        if(check(mid)) ans=mid, l=mid+1;
+        else r=mid-1;
+    }
+    printf("%d",ans);
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int N=2e5+10,M=2e5+10;
+int n,m;
+int w[N],v[N];
+ll S,s[N],g[N];
+int x[M],y[M];
+ll get(int M){
+    for(int i=1;i<=n;i++){
+        s[i]=s[i-1]+v[i]*(w[i]>=W);
+        g[i]=g[i-1]+1*(w[i]>=W);
+    }
+    ll temp=0;
+    for(int i=1;i<=m;i++){
+        temp+=(s[y[i]-s[x[i]-1]])*(g[y[i]]-g[x[i]-1]);
+    }
+    return temp;
+}
+int main(){
+    scanf("%d%d%lld",&n,&m,&S);
+    for(int i=1;i<=n;i++) scanf("%d%d",&w[i],&v[i]);
+    for(int i=1;i<=m;i++){
+        scanf("%d%d",&x[i],&y[i]);
+    }
+    int l=0,r=1e6,mid; ll ans=1e18;
+    while(l<=r){
+        mid=(l+r)>>1;
+        ll res;
+        if(res<S) r=mid-1;
+        else l=mid+1;
+        ans=min(ans,abs(S-res));
+    }
+    printf("%lld",ans);
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+int n,m;
+int bz[N][20];
+int main(){
+    scanf("%d%d",&n,&m);
+    for(int i=1;i<=n;i++) scanf("%d",&bz[i][0]);
+    for(int j=1;j<=18;j++){
+        for(int i=1;i<=n;i++){
+            if(i+(1<<(j-1))<=n){
+                bz[i][j]=min(bz[i][j-1],bz[i+(1<<(j-1))][j-1]);
+            }
+        }
+    }
+    int l,r;
+    while(m--){
+        cin>>l>>r;
+        int p=log2(r-l+1);
+        printf("%d\n",max(bz[l][p],bz[r-(1<<p)+1][p]));
+    }
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+int n,m;
+int f[N][17],log_2[N];
+int main(){
+    scanf("%d%d",&n,&m);
+    for(int i=2;i<=n;i++) log_2[i]=log_2[i/2]+1;
+    for(int i=1;i<=n;i++) cin>>f[i][0];
+    for(int j=1;j<=16;j++){
+        for(int i=1;i+(1<<(j))-1<=n;i++){
+                f[i][j]=min(f[i][j-1],f[i+(1<<(j-1))][j-1]);
+        }
+    }
+    for(int l,r;m;m--){
+        cin>>l>>r;
+        int p=log_2[r-l+1];
+        printf("%d\n",min(f[l][p],f[r-(1<<p)+1][p]));
+    }
+    return 0;
+}
+
+//07-DFS与BFS
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+int n,sum,ans[5][105],num[105],vis[5][105];
+void dfs(int now){
+    if(now==n){
+        sum++;
+        if(sum>=4) return;
+        for(int i=1;i<=n;i++){
+            ans[num][i]=num[i];
+        }
+        return;
+    }
+    for(int i=1;i<=n;i++){
+        if(vis[1][i]||vis[2][i-(now+1)+n]||vis[3][i+(now+1)]) continue;
+        vis[1][i]=vis[2][i-(now+1)+n]=vis[3][i+(now+1)]=1;
+        num[now+1]=i;
+        dfs(now+1);
+        vis[1][i]=vis[2][i-(now+1)+n]=vis[3][i+(now+1)]=0;
+    }
+}
+int main(){
+    cin>>n;
+    dfs(0);
+    for(int i=1;i<=3;i++){
+        for(int j=1;j<=n;j++){
+            cout<<ans[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<sum;
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+int n,a[1005][1005];
+queue<pair<int,int>>q;
+int vis[1005][1005];
+int dx[4][2]={{0,1},{0,-1},{1,0},{-1,0}};
+void bfs(){
+    while(!q.empty()){
+        int x=q.front().first;
+        int y=q.front().second;
+        a[x][y]=-1;
+        vis[x][y]=1;
+        q.pop();
+        for(int i=0;i<=3;i++){
+            int nux=x+dx[i][0];
+            int nuy=y+dx[i][1];
+            if(nux<1||nux>n||nuy<1||nuy>n||vis[nux][nuy]==1) continue;
+            if(a[nux][nuy]==0) q.push(make_pair(nux,nuy));
+        }
+    }
+}
+int main(){
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>a[i][j];
+        }
+    }
+    for(int i=1;i<=n;i++){
+        if(a[i][1]==0){
+            q.push(make_pair(i,1));
+        }
+        if(a[i][n]==0){
+            q.push(make_pair(i,n));
+        }
+        if(a[1][i]==0){
+            q.push(make_pair(1,i));
+        }
+        if(a[n][i]==0){
+            q.push(make_pair(n,i));
+        }
+        bfs();
+    }
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            if(a[i][j]==0) a[i][j]=2;
+            if(a[i][j]==-1) a[i][j]=0;
+            cout<<a[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+int n,m,xx,yy;
+queue<pair<int,int>>q;
+int vis[1005][1005];
+int fx[16]={2,-2,2,-2,-1,-1,1,1},fy[16]={1,1,-1,-1,2,-2,2,-2};
+void bfs(){
+    while(!q.empty()){
+        int x=q.front().first;
+        int y=q.front().second;
+        q.pop();
+        for(int i=0;i<=7;i++){
+            int nux=x+fx[i];
+            int nuy=y+fy[i];
+            if(nux<1||nux>n||nuy<1||nuy>n) continue;
+            if(vis[nux][nuy]==-1){
+                vis[nux][nuy]=vis[x][y]+1;
+                q.push(make_pair(nux,nuy));
+            }
+        }
+    }
+}
+int main(){
+    cin>>n>>m>>xx>>yy;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            vis[i][j]=-1;
+        }
+    }
+    vis[xx][yy]=0;
+    q.push(make_pair(xx,yy));
+    bfs();
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            printf("%-5d",vis[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+char s[105][105];
+int n,m;
+int vis[105][105],mp[105][105];
+int d[4][2]={{0,1},{0,-1},{1,0},{-1,0}};
+void dfs(int x,int y){
+    if(x>n||y>m||x<1||y<1) return;
+    for(int i=0;i<=3;i++){
+        int dx=x+d[i][0];
+        int dy=y+d[i][1];
+        if(vis[dx][dy]||mp[dx][dy]==0) continue
+        vis[dx][dy]=1;
+        dfs(dx,dy);
+    }
+}
+int main(){
+    cin>>n>>m;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(s[i][j]=='0') mp[i+1][j+1]=0;
+            else mp[i+1][j+1]=1;
+        }
+    }
+    int cnt=0;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(mp[i][j]==0&&vis[i][j]) continue;
+                cnt++;
+                vis[i][j]=1;
+                dfs(i,j);
+        }
+    }
+    cout<<cnt;
+    return 0;
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+int n,r;
+int ans[10005],vis[10005];
+void dfs(int now,int sum){
+    if(now==n+1){
+        if(sum==r){
+            for(int i=1;i<=r;i++){
+                cout<<setw(3)<<ans[i]<<endl;
+            }
+            return;
+        }else{
+            return;
+        }
+    }
+    if(sum>r) return;
+    ans[sum+1]=now;
+    dfs(now+1,sum+1);
+    dfs(now+1,sum);
+}
+int main(){
+    cin>>n>>r;
+    dfs(1,0);
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+int n,a,b;
+int k[100005];
+struct node{
+    int step;
+    int num;
+}
+queue<node>q;
+int vis[100005];
+int main(){
+    cin>>n>>a>>b;
+    for(int i=1;i<=n;i++){
+        cin>>k[i];
+    }
+    node start;
+    start.step=0;
+    start.num=a;
+    q.push(start);
+    while(!q.empty()){
+        node u=q.front();
+        q.pop();
+        if(vis[u.num]==1) continue;
+        vis[u.num]=1;
+        if(u.num==b){
+            cout<<u.step;
+            return 0;
+        }
+        if(!vis[u.num+k[u.num]]&&u.num+k[u.num]<=n){
+            node now;
+            now.step=u.step+1;
+            now.num=u.num+k[u.num];
+            vis[now.num]=1;
+            q.push(now);
+        }
+        if(!vis[u.num-k[u.num]]&&u.num-k[u.num]>0){
+            node now;
+            now.step=u.step+1;
+            now.num=u.num-k[u.num];
+            vis[now.num]=1;
+            q.push(now);
+        }
+    }
+    cout<<-1;
+    return 0;   
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+struct node{
+    int s,b;
+}a[10005];
+int ans=2147483647,n;
+void dfs(int now,int sum,int s_num,int b_num){
+    if(now==n+1){
+        if(sum>=1){
+            ans=min(abs(s_num-b_num),ans);
+        }
+        return;
+    }
+    dfs(now+1,sum,s_num,b_num);
+    dfs(now+1,sum+1,s_num*a[now].s,b_num+a[now].b);
+}
+int main(){
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>a[i].s>>a[i].b;
+    }
+    dfs(1,0,1,0);
+    cout<<ans;
+    return 0;
+}
+
+//H
+#include<bits/stdc++.h>
+using namespace std;
+int n;
+struct node{
+    int x,y;
+}s[1000005];
+bool f[100005];
+int ans=0;
+void dfs(int now){
+    if(now==n){
+        ans++;
+        return;
+    }
+    int flag=0;
+    if(!f[s[now+1].x]){
+        flag=1;
+        f[s[now+1].x]=true;
+        dfs(now+1);
+        f[s[now+1].x]=false;
+    }
+    if(!f[s[now+1].y]){
+        flag=1;
+        f[s[now+1].y]=1;
+        dfs(now+1);
+        f[s[now+1].y]=false;
+    }
+    if(flag==0)
+    return;
+}
+int main(){
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>s[i].x>>s[i].y;
+    }
+    dfs(0);
+    cout<<ans;
+    return 0;
+}
+
+//08-
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+const int N=110;
+int ww[N][N];
+int main(){
+    memset(ww,0x3f,sizeof(ww));
+    int n,m; cin>>n>>m;
+    for(int i=1;i<=n;i++) ww[i][i]=0;
+    for(int i=1,u,v,w;i<=m;i++){
+        cin>>u>>v>>w;
+        ww[u][v]=ww[v][u]=w;
+    }
+    for(int k=1;k<=n;k++){
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                ww[i][j]=ww[j][i]=min(ww[i][j],ww[i][k]+ww[k][j]);
+            }
+        }
+    }
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cout<<ww[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int> PII;
+const int N=250,INF=0x3f3f3f3f;
+int ti[N],dis[N][N];
+vector<int>done;
+queue<PII>tt;
+int main(){
+    int n,m; cin>>n>>m;
+    for(int i=0;i<n;i++) dis[i][i]=0;
+    for(int i=0;i<n;i++){
+        cin>>ti[i];
+        tt.push({ti[i],i});
+    }
+    for(int i=1,u,v,w;i<=m;i++){
+        cin>>u>>v>>w;
+        dis[u][v]=dis[v][u]=w;
+    }
+    int q; cin>>q;
+    while(q--){
+        int x,y,t;
+        if(ti[x]>t||ti[y]>t){
+            cout<<-1<<endl; continue;
+        }
+    }
+    while(tt.size()&&tt.front().first<=t){
+        int now=tt.front().second; tt.pop();
+        done.emplace_back(now);
+        for(auto i:done){
+            for(auto j:done){
+            dis[i][now]=dis[now][i]=min(dis[i][now],dis[i][j]+dis[j][now]);
+            }
+        }
+        for(auto i:done){
+            for(auto j:done){
+                dis[i][j]=dis[j][i]=min(dis[i][j],dis[i][now]+dis[now][j]);
+            }
+        }
+        if(dis[x][y]==INF) cout<<-1<<endl;
+        else cout<<dis[x][y]<<endl;
+    }
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+int dis[110][110],L[110][110];
+int n; ll Q;
+ll get_grey(int day){
+    int now[110][110]={0};
+    int k=day/n, w=day%n;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+        now[i][j]=now[j][i]=max(L[i][j],dis[i][j]-(k<<1)-(i<=w)-(j<=w));
+        }
+    }
+    for(int k=1;k<=n;k++){
+        for(int j=1;j<=n;j++){
+            for(int i=1;i<=n;i++){
+                now[i][j]=now[j][i]=min(now[i][j],now[i][k]+now[k][j]);
+            }
+        }
+    }
+    ll res=0;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            res+=now[i][j];
+        }
+    }
+    return res;
+}
+int main(){
+    cin>>n>>Q;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>dis[i][j];
+        }
+    }
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>L[i][j];
+        }
+    }
+    int L=1,R=1e9;
+    while(L<=R){
+        int mid=(L+R)>>1;
+        if(get_grey(mid)<=Q) R=mid-1;
+        else L=mid+1;
+    }
+    if(get_grey(L)>Q) cout<<-1<<endl;
+    else cout<<L<<endl;
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const ll INF=0x3f3f3f3f3f3f3f3f;
+const int N=5e5+10;
+struct edge{
+    int to; ll w;
+    edge(int tt,ll ww) {to=tt;w=ww;}
+};
+ll dis[N]={0};
+bool in_q[N]={false};
+vector<edge>e[N];
+void SPfa(int s){
+    memset(dis,0x3f,sizeof(dis));
+    dis[s]=0;
+    queue<int>q;
+    q.push(s);
+    in_q[s]=true;
+    while(!q.empty()){
+        int u=q.front(); q.pop();
+        in_q[u]=false;
+        if(dis[u]==INF) continue;
+        for(int i=0;i<e[u].size();i++){
+            int v=e[u][i].to; ll w=e[u][i].w;
+            if(dis[v]>dis[u]+w){
+                dis[v]=dis[u]+w;
+                if(!in_q[v]){
+                    q.push(v);
+                    in_q[v]=true;
+                }
+            }
+        }
+    }
+}
+int main(){
+    int n,m,s; cin>>n>>m>>s;
+    for(int i=1;i<=m;i++){
+        int u,v; ll w;
+        scanf("%d%d%lld",&u,&v,&w);
+        e[u].emplace_back(v,w);
+    }
+    SPfa(s);
+    for(int i=1;i<=n;i++){
+        if(dis[i]==INF) cout<<2147483647;
+        else cout<<dis[i]<<" ";
+    }
+    return 0;
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10,M=2e5+10;
+const int INF=0x3f3f3f3f;
+int n,m,s;
+struct edge{
+    int from,to,w;
+    edge(int a,int b,int c){from=a;to=b;w=c;}
+};
+vector<edge>e[M];
+struct node{
+    int id,dis;
+    node(int a,int b){id=a;dis=b;}
+    bool operator < (const node &c) const
+    {return c.dis<dis;}
+};
+int dis[N]={0};
+bool vis[N]={false};
+void dijkstra(){
+    for(int i=1;i<=n;i++){
+        dis[i]=INF; vis[i]=false;
+    }
+    dis[s]=0;
+    priority_queue<node>pq;
+    pq.push(node(s,dis[s]));
+    while(!pq.empty()){
+        node now=pq.top(); pq.pop();
+        if(vis[now.id]) continue;
+        vis[now.id]=true;
+        for(int i=0;i<e[now.id].size();i++){
+            int to=e[now.id][i].to;
+            int w=e[now.id][i].w;
+            if(dis[to]>dis[now.id]+w){
+                dis[to]=dis[now.id]+w;
+                pq.push(node(to,dis[to]));
+            }
+        }
+    }
+}
+int main(){
+    cin>>n>>m>>s;
+    for(int i=1;i<=n;i++) e[i].clear();
+    int u,v,w;
+    while(m--){
+        cin>>u>>v>>w;
+        e[u].push_back(v,w);
+    }
+    dijkstra();
+    for(int i=1;i<=n;i++){
+        cout<<dis[i]<<" ";
+    }
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int,int> PII;
+const ll N=1e4+10,INF=0x3f3f3f3f;
+struct edge{
+    ll from,to,nxt,w;
+    Edge(){from=to=0; nxt=-1;}
+}edge[(N*5)<<1];
+ll head[N],cnt=0;
+PLL node;
+void add_edge(ll u,ll v,ll w){
+    edge[cnt].from=u;
+    edge[cnt].to=v;
+    edge[cnt].nxt=head[u];
+    edge[cnt].w=w;
+    head[u]=cnt++;
+}
+ll fee[N];
+ll n,m,b;
+bool done[N];
+ll dis[N];
+priority_queue<PLL,vector<PLL>,greater<PLL>>pq;
+bool solve(ll x){
+    bool acc[N]={false};
+    for(int i=1;i<=n;i++) acc[i]=fee[i]<=x;
+    for(int i=1;i<=n;i++){
+        done[i]=false; dis[i]=INF;
+    }
+    dis[1]=0;
+    pq.push({dis[1],1});
+    while(!pq.empty()){
+        node now=pq.top(); pq.pop();
+        if(done[now.id]) continue;
+        done[now.id]=true;
+        for(int i=head[now.id];~i;i=edge[i].nxt){
+            int to=edge[i].to;
+            if(done[now.to]) continue;
+            if(acc[to]&&dis[to]>dis[now.id]+edge[i].w){
+                dis[to]=dis[now.id]+edge[i].w;
+                pq.push({dis[to],to});
+            }
+        }
+    }
+    return dis[n]<=b;
+}
+int main(){
+    cin>>n>>m>>b;
+    for(int i=1;i<=n;i++) {head[i]=-1,edge[i].nxt=-1;}
+    ll P=0;
+    for(int i=1;i<=n;i++){
+        cin>>fee[i];
+        R=max(fee[i],R);
+    }
+    for(int i=1;i<=m;i++){
+        ll u,v,w;
+        cin>>u>>v>>w;
+        add_edge(u,v,w); add_edge(v,u,w);
+    }
+    if(!solve(INF)){
+        cout<<"AFK"<<endl;
+        return 0;
+    }
+    L=max(fee[1],fee[n]);
+    while(L<=R){
+        ll mid=(L+R)>>1;
+        if(solve(mid)) R=mid-1;
+        else L=mid+1;
+    }
+    cout<<L<<endl;
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e3+10,M=1e5+10;
+const int INF=0x3f3f3f3f;
+struct edge{
+    int from,to,w;
+}edge[M];
+int mar[N][N]={0};
+int n,m;
+struct node{
+    int id,dis;
+    node(int a,int b){id=a;dis=b;}
+    bool operator < (const node &c) const
+    {return c.dis<dis;}
+};
+int dis[N]={0};
+bool vis[N]={false};
+void dijkstra(int s){
+    for(int i=1;i<=n;i++){
+        dis[i]=INF; vis[i]=false;
+    }
+    dis[s]=0;
+    priority_queue<node>pq;
+    pq.push(node(s,dis[s]));
+    while(!pq.empty()){
+        node now=pq.top(); pq.pop();
+        if(vis[now.id]) continue;
+        vis[now.id]=true;
+        for(int i=1;i<=n;i++){
+            if(!mar[now.id][i]) continue;
+            if(vis[i]) continue;
+            if(dis[i]>dis[now.id]+mar[now.id][i]){
+                dis[i]=dis[now.id]+mar[now.id][i];
+                pq.push(node(i,dis[i]));
+            }
+        }
+    }
+}
+int res=0;
+int main(){
+    cin>>n>>m;
+    memset(mar,0,sizeof(mar));
+    for(int i=1;i<=m;i++){
+        int u,v,w;
+        scanf("%d%d%d",&u,&v,&w);
+        edge[i].from=u; edge[i].to=v; edge[i].w=w;
+        mar[u][v]=min(w,mar[u][v]);
+    }
+    dijkstra(1);
+    for(int i=2;i<=n;i++){
+        res+=dis[i];
+    }
+    memset(mar,0,sizeof(mar));
+    for(int i=1;i<=m;i++){
+        mar[v][u]=min(w,mar[v][u]);
+    }
+    dijkstra(1);
+    for(int i=2;i<=n;i++){
+        res+=dis[i];
+    }
+    cout<<res;
+    return 0;
+}
+
+//I
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+struct edge{
+    int from,to,w;
+}edge[N*10];
+int head[N]={0},cnt=0;
+void add_edge(int u,int v){
+    edge[cnt].from=u; edge[cnt].to=v; edge[cnt].nxt=head[u];
+    head[u]=cnt++;
+}
+struct node{
+    int min_price,res;
+}dp[N];
+int price[N];
+bool vis[N]={false};
+int main(){
+    int n,m; cin>>n>>m;
+    for(int i=0;i<=n;i++){
+        head[i]=-1; edge[(i<<1)-1].nxt=edge[i<<1].nxt=-1;
+        vis[i]=true;
+    }
+    for(int i=1;i<=n;i++){
+        cin>>price[i];
+    }
+    for(int x,y,z;m,m--){
+        cin>>x>>y>>z;
+        add_edge(x,y); 
+        if(z==2) add_edge(y,x);
+    }
+    dp[1].min_price=price[1]; dp[1].res=0;
+    queue<int>q;
+    q.push(1); vis[1]=false;
+    while(!q.empty()){
+        int now=q.front(); q.pop();
+        for(int i=head[now];~i;i=edge[i].nxt){
+            int to=edge[i].to;
+            if(vis[to]){
+                vis[to]=false;
+                dp[to].res=max(dp[now].res,price[to]-dp[now].min_price);
+                dp[to].min_price=min(dp[now].min_price,price[to]);
+                q.push(to);
+            }
+            else{
+                if(dp[to].res<dp[now].res){
+                    dp[to].res=dp[now].res; q.push(to);
+                }
+                if(dp[to].min_price>dp[now].min_price){
+                    dp[to].min_price=dp[now].min_price;
+                    dp[to].res=max(dp[to].res,price[to]-dp[now].min_price);
+                    q.push(to);
+                }
+            }
+        }
+    }
+    cout<<dp[n].res;
+    return 0;
+}
+
+//J
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int,int> PII;
+const ll N=1e4+10,INF=0x3f3f3f3f;
+vector<PII>edge[N];
+priority_queue<PII,vector<PII>,greater<PII>>pq;
+bool check(ll x){
+    vector<bool>done(n+1);
+    vector<int>tim(n+1,INF);
+    pq.push({0,1});
+    while(!pq.empty()){
+        PII now=pq.top(); pq.pop();
+        if(now==n) return true;
+        done[now]=true;
+        for(auto [nxt,dis]:edge[now]){
+            if(done[nxt]) continue;
+            int nxt_ti=ti+(dis>x);
+            if(nxt_ti>k) continue;
+            if(tim[nxt]>nxt_ti){
+                tim[nxt]=nxt_ti;
+                pq.push({nxt,nxt_ti});
+            }
+        }
+    }
+    return false;
+}
+int main(){
+    int n,p,k;
+    int a,b; ll l,L=INF,R=0;
+    while(p--){
+        cin>>a>>b>>l;
+        edge[a].push_back({b,l});
+        edge[b].push_back({a,l});
+        L=min(L,l);
+        R=max(R,l);
+    }
+    if(!check(R)){
+        cout<<-1;
+        return 0;
+    }
+    while(L<=R){
+        ll mid=(L+R)>>1;
+        if(check(mid)) R=mid-1;
+        else L=mid+1;
+    }
+    cout<<L;
+    return 0;
+}
+
+//09
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+int ti[N],val[N];
+int main(){
+    int t,m; cin>>t>>m;
+    for(int i=1;i<=m;i++) cin>>ti[i]>>val[i];
+    int dp[N]={0};
+    for(int i=1;i<=m;i++){
+        for(int j=t;j>=ti[i];j--){
+            dp[j]=max(dp[j],dp[j-ti[i]]+val[i]);
+        }
+    }
+    cout<<dp[t];
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N=1e7+10;
+int ti[N],val[N];
+int main(){
+    int t,m; cin>>t>>m;
+    for(int i=1;i<=m;i++) cin>>ti[i]>>val[i];
+    int dp[N]={0};
+    for(int i=1;i<=m;i++){
+        for(int j=ti[i];j<=t;j++){
+            dp[j]=max(dp[j],dp[j-ti[i]]+val[i]);
+        }
+    }
+    cout<<dp[t];
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+ll dp[25][30001];
+ll dp2[25][30001];
+struct a{
+    ll value,imp,product;
+}goods[26];
+bool cmp(a x,a y){
+    if(x.imp!=y.imp) return x.imp>y.imp;
+    return x.value>y.value;
+}
+int main(){
+    int n,m,temp;
+    cin>>n>>m;
+    bool flag=true;
+    for(int i=1;i<=m;i++){
+        cin>>goods[i].value>>goods[i].imp;
+        goods[i].product=goods[i].value*goods[i].imp;
+    }
+    sort(goods+1,goods+m+1,cmp);
+    for(int i=1;i<=m&&flag;i++){
+        for(int j=0;j<=n&&flag;j++){
+            if(j<=goods[i].value){
+                dp[i][j]=dp[i-1][j];
+                dp2[i][j]=dp2[i-1][j];
+            }
+            else{
+                dp[i][j]=max(dp[i-1][j],dp[i-1][j-goods[i].value]+goods[i].product);
+                dp2[i][j]=max(dp2[i-1][j],dp2[i-1][j-goods[i].value]+goods[i].value);
+            }
+            if(dp2[i][j]==n) flag=false;
+        }
+    }
+    cout<<dp[m][n];
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int> PII;
+int main(){
+    int m,s,t; cin>>m>>s>>t;
+    int now=0,dis=0;
+    while(m>=10&&now<t){
+        dis+=60; now++; m-=10;
+        if(dis>=s){
+            cout<<"Yes\n"<<now; return 0;
+        }
+    }
+    if(now>=t){
+        cout<<"No\n"<<dis; return 0;
+    }
+    PII run={dis,m},magic={dis,m};
+    while(now<=t){
+        if(magic.second>=10){
+            magic.first+=60; magic.second-=10;
+        }
+        else magic.second+=4;
+        run.first+=60;
+        now++;
+        if(run.first<magic.first) run=magic;
+        if(run.first>=s){
+            cout<<"Yes\n"<<now; return 0;
+        }
+        if(now>=t){
+            cout<<"No\n"<<run.first; return 0;
+        }
+    }
+    cout<<"No\n"<<run.first;
+    return 0;
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    queue<int>q; set<int>st;
+    int n; cin>>n;
+    for(int i=1,temp;i<=n;i++){
+        cin>>temp;
+        for(auto w:st){
+            q.push(w+temp);
+            if(w-temp) q.push(abs(w-temp));    
+        }   
+        while(q.size()){
+            st.insert(q.front()); q.pop();
+        }
+        st.insert(temp);
+    }
+    cout<<st.size();
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+struct node{
+    int lose,win,use;
+}a[N];
+int dp[N]={0};
+int main(){
+    int n,x; cin>>n>>x;
+    for(int i=1;i<=n;i++) cin>>a[i].lose>>a[i].win>>a[i].use;
+    for(int i=1;i<=n;i++){
+        for(int j=x;j>=0;j--){
+            if(j>=a[i].use){
+                dp[j]=max(dp[j]+a[i].lose,dp[j-a[i].use]+a[i].win);
+            }
+            else{
+                dp[j]=max(dp[j],dp[j]+a[i].lose);
+            }
+        }
+    }
+    cout<<(long long)dp[x]*5;
+    return 0;
+}
+
+//10
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+int S[N];
+void init(int n){
+    for(int i=1;i<=n;i++) S[i]=i;
+}
+int find_set(int x){
+    if(x!=S[x]) S[x]=find_set(S[x]);
+    return S[x];
+}
+void merge_set(int u,int v){
+    u=find_set(u); v=find_set(v);
+    if(u!=v) S[u]=S[v];
+}
+int main(){
+    int n,m; cin>>n>>m;
+    init(n);
+    for(int i=1,z,x,y;i<=m;i++){
+        cin>>z>>x>>y;
+        if(z==1) merge_set(x,y);
+        else{
+            x=find_set(x); y=find_set(y);
+            if(S[x]==S[y]) cout<<"Y\n";
+            else cout<<"N\n";
+        }
+    }
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int> PII;
+const int INF=0x3f3f3f3f;
+const int N=3e4+10;
+int S[N]={0},dis[N]={0},len[N]={0};
+int find_set(int x){
+    if(x!=S[x]){
+        int temp=S[x];
+        S[x]=find_set(S[x]);
+        dis[x]+=dis[temp];
+    }
+    return S[x];
+}
+void merge_set(int u,int v){
+    u=find_set(u); v=find_set(v);
+    S[u]=v;
+    dis[u]+=len[v];
+    len[v]+=len[u];
+}
+int main(){
+    int T; cin>>T;
+    for(int i=1;i<=T;i++){
+        S[i]=i; len[i]=1;
+    }
+    while(T--){
+        string str; int i,j; cin>>str>>i>>j;
+        if(str=="M") merge_set(i,j);
+        else{
+            i=find_set(i); j=find_set(j);
+            if(S[i]==S[j]) cout<<max(abs(dis[i]-dis[j])-1,0);
+            else cout<<-1;
+        }
+    }
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1010;
+int S[N*N]={0};
+int find_set(int x){
+    if(x!=S[x]) S[x]=find_set(S[x]);
+    return S[x];
+}
+void merge_set(int u,int v){
+    u=find_set(u); v=find_set(v);
+    if(u!=v) S[u]=v;
+}
+set<int>s;
+int main(){
+    int n,m; cin>>n>>m;
+    int k; cin>>k;
+    for(int i=1;i<=n*m;i++) S[i]=i;
+    for(int i=1;i<=k;i++){
+        int a,b; cin>>a>>b;
+        merge_set(a,b);
+    }
+    for(int i=1;i<=m*n;i++) s.insert(find_set(i));
+    cout<<s.size();
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e6+10;
+int S[N]={0};
+int find_set(int x){
+    if(x!=S[x]) S[x]=find_set(S[x]);
+    return S[x];
+}
+void merge_set(int u,int v){
+    u=find_set(u); v=find_set(v);
+    if(u!=v) S[u]=v;
+}
+bool vis[N]={false};
+vector<int>vec;
+int main(){
+    int n; cin>>n;
+    for(int i=1;i<N;i++){
+        S[i]=i; vis[i]=true;
+    }
+    for(int i=1,temp;i<=n;i++){
+        cin>>temp;
+        if(vis[temp]){
+            vec.push_back(temp);
+            vis[temp]=false;
+        }
+        else{
+            while(1){
+                merge_set(temp,find_set(temp)+1);
+                temp=find_set(temp);
+                if(vis[temp]){
+                    vec.push_back(temp);
+                    vis[temp]=false;
+                    break;
+                }
+            }
+        }
+    }
+    for(auto i:vec) cout<<i<<" ";
+    return 0;
+}
+
+//11
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+struct Edge{
+    int to,nxt;
+}edge[N<<1];
+int head[N]={0},cnt=0,degree[N]={0};
+void add_edge(int u,int v){
+    edge[cnt].to=v; edge[cnt].nxt=head[u]; head[u]=cnt++;
+    degree[u]++;
+}
+queue<int>q;
+int main(){
+    int n; cin>>n;
+    for(int i=1;i<=n;i++) head[i]=-1;
+    for(int i=0;i<=n;i++) edge[i].nxt=-1;
+    for(int i=1,a,b;i<=n;i++){
+        cin>>a>>b;
+        add_edge(a,b); add_edge(b,a);
+    }
+    for(int i=1;i<=n;i++){
+        if(degree[i]==1) q.push(i);
+    }
+    while(q.size()){
+        int now=q.front(); q.pop();
+        --degree[now];
+        for(int i=head[now];~i;i=edge[i].nxt){
+            int v=edge[i].to;
+            --degree[v];
+            if(degree[v]==1) q.push(v);
+        }
+    }
+    for(int i=1;i<=n;i++){
+        if(degree[i]>1) cout<<i<<" ";
+    }
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+const int N=5e3+10,M=5e5+10;
+const int mod=80112002;
+struct Edge{
+    int to,nxt;
+}edge[M];
+int head[N]={0},cnt=0,in_degree[N]={0},out_degree[N]={0};
+void add_edge(int u,int v){
+    edge[cnt].to=v; edge[cnt].nxt=head[u]; head[u]=cnt++;
+    in_degree[v]++; out_degree[u]++;
+}
+queue<int>q;
+set<int>st;
+int sum[N]={0};
+int main(){
+    int n,m; cin>>n>>m;
+    for(int i=1;i<=n;i++) head[i]=-1;
+    for(int i=0;i<=n;i++) edge[i].nxt=-1;
+    for(int i=1,a,b;i<=m;i++){
+        cin>>a>>b;
+        add_edge(a,b);
+    }
+    for(int i=1;i<=n;i++){
+        if(!in_degree[i]){
+            q.push(i); sum[i]=1;
+        }
+        if(!out_degree[i]) st.insert(i);
+    }
+    while(q.size()){
+        int now=q.front(); q.pop();
+        st.insert(now);
+        for(int i=head[now];~i;i=edge[i].nxt){
+            int v=edge[i].to;
+            sum[v]=(sum[v]+sum[now])%mod;
+            --in_degree[v]==1;
+            if(!in_degree[v]) q.push(v);
+        }
+    }
+    int res=0;
+    for(auto i:st) res=(res+sum[i])%mod;
+    cout<<res;
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int> PII;
+const int N=510,M=510*510,INF=0x3f3f3f3f;
+int s,p;
+int S[N]={0};
+int find_set(int x){
+    if(x!=S[x]) S[x]=find_set(S[x]);
+    return S[x];
+}
+int cnt=0;
+struct node{
+    int u,v; double w;
+    bool operator < (const node &a)const{
+        return w>a.w;
+    }
+}edge[M];
+void Kruskal(){
+    sort(edge,edge+cnt);
+    for(int i=1;i<=p;i++) S[i]=i;
+    int tot=0;
+    double res=0;
+    for(int i=0;i<cnt;i++){
+        if(tot==p-s) break;
+        int a=find_set(edge[i].u),b=find_set(edge[i].v);
+        if(a==b) continue;
+        res=edge[i].w;
+        ++tot;
+        S[a]=b;
+    } 
+    printf("%.2f",res);
+}
+pair<int,int>PII;
+int main(){
+    cin>>s>>p;
+    for(int i=1;i<=p;i++){
+        cin>>edge[i].y>>edge[i].x;
+    }
+    for(int i=1;i<=p;i++){
+        for(int j=i+1;j<=p;j++){
+            edge[cnt].u=i; edge[cnt].v=j;
+            edge[cnt++].w=sqrt((coo[i].x-coo[j].x)*(coo[i].x-coo[j].x)+(coo[i].y-coo[j].y)*(coo[i].y-coo[j].y));
+        }
+    }
+    Kruskal();
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int>PII;
+const int N=2e5+10,M=1e5+10,INF=0x3f3f3f3f;
+int n,m;
+int S[N]={0};
+int find_set(int x){
+    if(S[x]!=x) S[x]=find_set(S[x]);
+    return S[x];
+}
+struct node{
+    int u,v,w;
+    bool operator <(const node &x){
+        return w<x.w;
+    }
+}edge[M];
+int sum=0;
+void Kruskal(){
+    sort(edge+1,edge+n+1);
+    for(int i=1;i<=n;i++) S[i]=i;
+    int res=0,tot=0;
+    for(int i=1;i<=m;i++){
+        if(tot==n-1) break;
+        a=find_set(edge[i].u),b=find_set(edge[i].v);
+        if(a==b) continue;
+        res+=edge[i].w;
+        tot++;
+        S[a]=b;
+    }
+    cout<<sum-res;
+    return;
+}
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=m;i++){
+        cin>>edge[i].u>>edge[i].v>>edge[i].w;
+        sum+=edge[i].w;
+        if(!edge[i].w) edge[i].w=INF;
+    }
+    Kruskal();
+    return 0;
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int>PII;
+const int N=2e3+5,M=1e4+5,INF=0x3f3f3f3f;
+int n,m;
+int S[N]={0};
+int find_set(int x){
+    if(S[x]!=x) S[x]=find_set(S[x]);
+    return S[x];
+}
+struct node{
+    int u,v,w;
+    bool operator <(const node &x){
+        return w<x.w;
+    }
+}edge[M];
+
+void Kruskal(){
+    sort(edge+1,edge+m+1);
+    for(int i=1;i<=n;i++) S[i]=i;
+    int tot=0,res=0;
+    for(int i=1;i<=m;i++){
+        if(tot==n-1) break;
+        int a=find_set(edge[i].u),b=find_set(edge[i].v);
+        if(a==b) continue;
+        res=edge[i].w;
+        tot++;
+        S[a]=b;
+    }
+    cout<<res;
+    return;
+}
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=m;i++) cin>>edge[i].u>>edge[i].v>>edge[i].w;
+    Kruskal();
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int>PII;
+const int N=1e5+10,M=1e5+10,INF=0x3f3f3f3f;
+int n,m;
+int S[N]={0};
+int find_set(int x){
+    if(S[x]!=x) S[x]=find_set(S[x]);
+    return S[x];
+}
+struct node{
+    int u,v,w;
+    bool operator <(const node &x){
+        return w<x.w;
+    }
+}edge[M];
+void Kruskal(){
+    sort(edge+1,edge+m+1);
+    for(int i=1;i<=n;i++) S[i]=i;
+    int tot=0,res=0;
+    for(int i=1;i<=m;i++){
+        if(tot==n-1) break;
+        int a=find_set(edge[i].u),b=find_set(edge[i].v);
+        if(a==b) continue;
+        res=edge[i].w;
+        ++tot;
+        S[a]=b;
+    }
+    cout<<res<<endl;
+    return;
+}
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=m;i++) cin>>edge[i].u>>edge[i].v>>edge[i].w;
+    Kruskal();
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int>PII;
+const int N=1e3+10,M=N*N,INF=0x3f3f3f3f;
+int n,k;
+int S[N]={0};
+int find_set(int x){
+    if(S[x]!=x) S[x]=find_set(S[x]);
+    return S[x];
+}
+int cnt=0;
+struct node{
+    int u,v; double w;
+    bool operator <(const node &x){
+        return w<x.w;
+    }
+}edge[M];
+pair<double,double>coo[N];
+void Kruskal(){
+    sort(edge,edge+cnt);
+    for(int i=1;i<=n;i++) S[i]=i;
+    int tot=0;
+    for(int i=1;i<=cnt;i++){
+        if(tot==n-k) break;
+        int a=find_set(edge[i].u),b=find_set(edge[i].v);
+        if(a==b) continue;
+        if(tot==n-k){
+            printf("%.2f",edge[i].w);
+            return;
+        }
+        ++tot;
+        S[a]=b;
+    }
+    cout<<0;
+    return;
+}
+int main(){
+    cin>>n>>k;
+    for(int i=1;i<=n;i++){
+        cin>>coo[i].y>>coo[i].x;
+    }
+    for(int i=1;i<=n;i++){
+        for(int j=i+1;j<=n;j++){
+            edge[cnt].u=i; edge[cnt].v=j;
+            edge[cnt++].w=sqrt((coo[i].x-coo[j].x)*(coo[i].x-coo[j].x)+(coo[i].y-coo[j].y)*(coo[i].y-coo[j].y));
+        }
+    }
+    Kruskal();
+    return 0;
+}
+
+//H
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int>PII;
+const int N=1e5+10;
+struct Edge{
+    int to,nxt;
+}edge[N<<1];
+int head[N]={0},cnt=0,in_degree[N]={0};
+void add_edge(int u,int v){
+    edge[cnt].to=v; edge[cnt].nxt=head[u]; head[u]=cnt++;
+    in_degree[v]++;
+}
+queue<int>q;
+int res[N]={0};
+int main(){
+    int n,m; cin>>n>>m;
+    for(int i=1;i<n;i++) head[i]=-1;
+    for(int i=0;i<=m;i++) edge[i].nxt=-1;
+    for(int i=1,a,b;i<=m;i++){
+        cin>>a>>b;
+        add_edge(a,b);
+    }
+    for(int i=1;i<=n;i++){
+        if(!in_degree) {q.push(i); res[i]=1;}
+    }
+    while(q.size()){
+        int now=q.front(); q.pop();
+        int nxt_step=res[now]+1;
+        for(int i=head[now];~i;i=edge[i].nxt){
+            int nxt=edge[i].to;
+            --in_degree[nxt];
+        }
+        if(!in_degree[nxt]){
+            q.push(nxt);
+            res[nxt]=nxt_step;        
+        }
+    }
+    for(int i=1;i<=n;i++) cout<<res[i]<<" ";
+    return 0;
+}
+
+//12
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N=1e5+10;
+const int INF=0x3f3f3f3f;
+ll aa[N]; ll tree[N*4]={0};
+inline int ls(int p) {return p<<1;}
+inline int rs(int p) {return p<<1|1;}
+void push_up(int p){
+    tree[p]=tree[ls(p)]+tree[rs(p)];
+}
+void build(int p,int pl,int pr){
+    if(pl==pr){
+        tree[p]={0};
+        return;
+    }
+    int mid=(pl+pr)>>1;
+    build(ls(p),pl,mid);
+    build(rs(p),mid+1,pr);
+    push_up(p);
+}
+void update(int p,int pl,int pr,int x,ll d){
+    if(pl==pr&&pl==x){
+        tree[p]+=d;
+        return;
+    }
+    int mid=(pl+pr)>>1;
+    if(x<=mid) update(ls(p),pl,mid,x,d);
+    else update(rs(p),mid+1,pr,x,d);
+    push_up(p);
+    return;
+}
+ll query(int p,int pl,int pr,int L,int R){
+    ll res=0;
+    if(L<=pl&&pr<=R) return tree[p];
+    int mid=(pl+pr)>>1;
+    if(L<=mid) res+=query(ls(p),pl,mid,L,R);
+    if(R>mid) res+=query(rs(p),mid+1,pr,L,R);
+    return res;
+}
+int main(){
+    int n,w; cin>>n>>w;
+    build(1,1,n);
+    string op;
+    ll a,b;
+    while(w--){
+        cin>>op>>a;
+        if(op=="x") update(1,1,n,a,b);
+        else cout<<query(1,1,n,a,b)<<endl;
+    }
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const ll N=1e5+5;
+const ll INF=0x3f3f3f3f;
+ll aa[N]; ll tree[N*4]={0}; ll tag[N<<2]={0};
+int ls(int p){return p<<1;}
+int rs(int p){return p<<1|1;}
+void push_up(int p){
+    tree[p]=tree[ls(p)]+tree[rs(p)];
+}
+void add_tag(int p,int pl,int pr,ll d){
+    tag[p]+=d;
+    tree[p]+=d*(pr-pl+1);
+}
+void push_down(int p,int pl,int pr){
+    if(tag[p]){
+        ll mid=(pl+pr)>>1;
+        add_tag(ls(p),pl,mid,tag[p]);
+        add_tag(rs(p),mid+1,pr,tag[p]);
+        tag[p]=0;
+    }
+}
+void build(int p,int pl,int pr){
+    if(pl==pr){
+        tree[p]=aa[pl];
+        return;
+    }
+    int mid=(pl+pr)>>1;
+    build(ls(p),pl,mid);
+    build(rs(p),mid+1,pr);
+    push_up(p);
+}
+void update(int p,int pl,int pr,ll L,ll R,ll d){
+    if(L<=pl&&pr<=R){
+        add_tag(p,pl,pr,d);
+        return;
+    }
+    push_down(p,pl,pr);
+    int mid=(pl+pr)>>1;
+    if(L<=mid) update(ls(p),pl,mid,L,R,d);
+    if(R>mid) update(rs(p),mid+1,pr,L,R,d);
+    push_up(p);
+    return;
+}
+ll query(int p,int pl,int pr,ll L,ll R){
+    if(L<=pl&&pr<=R) return tree[p];
+    push_down(p,pl,pr);
+    ll res=0;
+    ll mid=(pl+pr)>>1;
+    if(L<=mid) res+=query(ls(p),pl,mid,L,R);
+    if(R>mid) res+=query(rs(p),mid+1,pr,L,R);
+    return res;
+}
+int main(){
+    ll n,m; cin>>n>>m;
+    for(int i=1;i<=n;i++) cin>>aa[i];
+    build(1,1,n);
+    for(int i=1,temp,x,y,k;i<=m;i++){
+        cin>>temp;
+        switch(temp){
+            case 1:
+                cin>>x>>y>>k;
+                update(1,1,n,x,y,k);
+                break;
+            case 2:
+                cin>>x>>y;
+                cout<<query(1,1,n,x,y)<<endl;
+                break;
+        }
+    }
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N=1e5+10;
+const int INF=0x3f3f3f3f;
+ll n,T,MOD,MIN,MAX;
+ll sub[N]={0};
+int sum[N]={0};
+int main(){
+    cin>>n>>T>>MOD>>MIN>>MAX;
+    while(T--){
+        string S; cin>>S;
+        if(S=="A"){
+            ll L,R,X; cin>>L>>R>>X;
+            sub[L]+=X;
+            sub[R+1]-=X;
+        }
+        else{
+            int L,R; cin>>L>>R;
+            ll now=0,res=0;
+            for(int i=1;i<=n;i++){
+                now+=sub[i];
+                if(now>=MIN&&now<=MAX) res++;
+            }
+            cout<<res<<endl;
+        }
+    }
+    for(int i=1,now=0;i<=n;i++){
+        now+=sub[i];
+        ll temp=now*i%MOD;
+        if(MIN<=temp&&temp<=MAX) sum[i]=sum[i-1]+1;
+        else sum[i]=sum[i-1];
+    }  
+    int Final; cin>>Final;
+    while(Final--){
+        int L,R; cin>>L>>R;
+        cout<<sum[R]-sum[L-1]<<endl;
+    }
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+int C,S,W;
+const int N=6e4+10;
+int tree[N*4]={0};
+int tag[N<<2]={0};
+int ls(int p) {return p<<1;}
+int rs(int p) {return p<<1|1;}
+void push_up(int p){
+    tree[p]=max(tree[ls(p)],tree[rs(p)]);
+}
+void add_tag(int p,int pl,int pr,int d){
+    tag[p]+=d;
+    tree[p]+=d;
+}
+void push_down(int p,int pl,int pr){
+    if(tag[p]){
+        ll mid=(pl+pr)>>1;
+        add_tag(ls(p),pl,mid,tag[p]);
+        add_tag(rs(p),mid+1,pr,tag[p]);
+        tag[p]=0;
+    }
+}
+void update(int p,int pl,int pr,int L,int R,int d){
+    if(L<=pl&&pr<=R){
+        add_tag(p,pl,pr,d);
+        return;
+    }
+    push_down(p,pl,pr);
+    int mid=(pl+pr)>>1;
+    if(L<=mid) update(ls(p),pl,mid,L,R,d);
+    if(R>mid) update(rs(p),mid+1,pr,L,R,d);
+    push_up(p);
+    return;
+}
+int main(){
+    cin>>C>>S>>W;
+    int O,D,N;
+    while(W--){
+        cin>>O>>D>>N;
+        update(1,1,C-1,O,D-1,N);
+        if(tree[1]<=S) cout<<"T\n";
+        else{
+            cout<<"N\n";
+            update(1,1,C-1,1,O-1,-N);
+        }
+    }
+    return 0;
+}
+
+//13-模拟
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+   
+
+
