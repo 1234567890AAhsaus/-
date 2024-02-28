@@ -2797,6 +2797,23 @@ int main(){
 
 //13-模拟
 
+//A
+#include <bits/stdc++.h>
+using namespace std;
+int res=1,n;
+int main(){
+    cin>>n;
+    for(int i=1;i<n;i++){
+        res=(res+1)*2;
+    }
+    cout<<res;
+    return 0;
+}
+
+//B
+
+
+
 
 
 
