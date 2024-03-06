@@ -1,0 +1,482 @@
+//08-最短路
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+const int N=110;
+int ww[N][N];
+int main(){
+    memset(ww,0x3f,sizeof(ww));
+    int n,m; cin>>n>>m;
+    for(int i=1;i<=n;i++) ww[i][i]=0;
+    for(int i=1,u,v,w;i<=m;i++){
+        cin>>u>>v>>w;
+        ww[u][v]=ww[v][u]=w;
+    }
+    for(int k=1;k<=n;k++){
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                ww[i][j]=ww[j][i]=min(ww[i][j],ww[i][k]+ww[k][j]);
+            }
+        }
+    }
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cout<<ww[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int> PII;
+const int N=250,INF=0x3f3f3f3f;
+int ti[N],dis[N][N];
+vector<int>done;
+queue<PII>tt;
+int main(){
+    int n,m; cin>>n>>m;
+    for(int i=0;i<n;i++) dis[i][i]=0;
+    for(int i=0;i<n;i++){
+        cin>>ti[i];
+        tt.push({ti[i],i});
+    }
+    for(int i=1,u,v,w;i<=m;i++){
+        cin>>u>>v>>w;
+        dis[u][v]=dis[v][u]=w;
+    }
+    int q; cin>>q;
+    while(q--){
+        int x,y,t;
+        if(ti[x]>t||ti[y]>t){
+            cout<<-1<<endl; continue;
+        }
+    }
+    while(tt.size()&&tt.front().first<=t){
+        int now=tt.front().second; tt.pop();
+        done.emplace_back(now);
+        for(auto i:done){
+            for(auto j:done){
+            dis[i][now]=dis[now][i]=min(dis[i][now],dis[i][j]+dis[j][now]);
+            }
+        }
+        for(auto i:done){
+            for(auto j:done){
+                dis[i][j]=dis[j][i]=min(dis[i][j],dis[i][now]+dis[now][j]);
+            }
+        }
+        if(dis[x][y]==INF) cout<<-1<<endl;
+        else cout<<dis[x][y]<<endl;
+    }
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+int dis[110][110],L[110][110];
+int n; ll Q;
+ll get_grey(int day){
+    int now[110][110]={0};
+    int k=day/n, w=day%n;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+        now[i][j]=now[j][i]=max(L[i][j],dis[i][j]-(k<<1)-(i<=w)-(j<=w));
+        }
+    }
+    for(int k=1;k<=n;k++){
+        for(int j=1;j<=n;j++){
+            for(int i=1;i<=n;i++){
+                now[i][j]=now[j][i]=min(now[i][j],now[i][k]+now[k][j]);
+            }
+        }
+    }
+    ll res=0;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            res+=now[i][j];
+        }
+    }
+    return res;
+}
+int main(){
+    cin>>n>>Q;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>dis[i][j];
+        }
+    }
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>L[i][j];
+        }
+    }
+    int L=1,R=1e9;
+    while(L<=R){
+        int mid=(L+R)>>1;
+        if(get_grey(mid)<=Q) R=mid-1;
+        else L=mid+1;
+    }
+    if(get_grey(L)>Q) cout<<-1<<endl;
+    else cout<<L<<endl;
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const ll INF=0x3f3f3f3f3f3f3f3f;
+const int N=5e5+10;
+struct edge{
+    int to; ll w;
+    edge(int tt,ll ww) {to=tt;w=ww;}
+};
+ll dis[N]={0};
+bool in_q[N]={false};
+vector<edge>e[N];
+void SPfa(int s){
+    memset(dis,0x3f,sizeof(dis));
+    dis[s]=0;
+    queue<int>q;
+    q.push(s);
+    in_q[s]=true;
+    while(!q.empty()){
+        int u=q.front(); q.pop();
+        in_q[u]=false;
+        if(dis[u]==INF) continue;
+        for(int i=0;i<e[u].size();i++){
+            int v=e[u][i].to; ll w=e[u][i].w;
+            if(dis[v]>dis[u]+w){
+                dis[v]=dis[u]+w;
+                if(!in_q[v]){
+                    q.push(v);
+                    in_q[v]=true;
+                }
+            }
+        }
+    }
+}
+int main(){
+    int n,m,s; cin>>n>>m>>s;
+    for(int i=1;i<=m;i++){
+        int u,v; ll w;
+        scanf("%d%d%lld",&u,&v,&w);
+        e[u].emplace_back(v,w);
+    }
+    SPfa(s);
+    for(int i=1;i<=n;i++){
+        if(dis[i]==INF) cout<<2147483647;
+        else cout<<dis[i]<<" ";
+    }
+    return 0;
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10,M=2e5+10;
+const int INF=0x3f3f3f3f;
+int n,m,s;
+struct edge{
+    int from,to,w;
+    edge(int a,int b,int c){from=a;to=b;w=c;}
+};
+vector<edge>e[M];
+struct node{
+    int id,dis;
+    node(int a,int b){id=a;dis=b;}
+    bool operator < (const node &c) const
+    {return c.dis<dis;}
+};
+int dis[N]={0};
+bool vis[N]={false};
+void dijkstra(){
+    for(int i=1;i<=n;i++){
+        dis[i]=INF; vis[i]=false;
+    }
+    dis[s]=0;
+    priority_queue<node>pq;
+    pq.push(node(s,dis[s]));
+    while(!pq.empty()){
+        node now=pq.top(); pq.pop();
+        if(vis[now.id]) continue;
+        vis[now.id]=true;
+        for(int i=0;i<e[now.id].size();i++){
+            int to=e[now.id][i].to;
+            int w=e[now.id][i].w;
+            if(dis[to]>dis[now.id]+w){
+                dis[to]=dis[now.id]+w;
+                pq.push(node(to,dis[to]));
+            }
+        }
+    }
+}
+int main(){
+    cin>>n>>m>>s;
+    for(int i=1;i<=n;i++) e[i].clear();
+    int u,v,w;
+    while(m--){
+        cin>>u>>v>>w;
+        e[u].push_back(v,w);
+    }
+    dijkstra();
+    for(int i=1;i<=n;i++){
+        cout<<dis[i]<<" ";
+    }
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int,int> PII;
+const ll N=1e4+10,INF=0x3f3f3f3f;
+struct edge{
+    ll from,to,nxt,w;
+    Edge(){from=to=0; nxt=-1;}
+}edge[(N*5)<<1];
+ll head[N],cnt=0;
+PLL node;
+void add_edge(ll u,ll v,ll w){
+    edge[cnt].from=u;
+    edge[cnt].to=v;
+    edge[cnt].nxt=head[u];
+    edge[cnt].w=w;
+    head[u]=cnt++;
+}
+ll fee[N];
+ll n,m,b;
+bool done[N];
+ll dis[N];
+priority_queue<PLL,vector<PLL>,greater<PLL>>pq;
+bool solve(ll x){
+    bool acc[N]={false};
+    for(int i=1;i<=n;i++) acc[i]=fee[i]<=x;
+    for(int i=1;i<=n;i++){
+        done[i]=false; dis[i]=INF;
+    }
+    dis[1]=0;
+    pq.push({dis[1],1});
+    while(!pq.empty()){
+        node now=pq.top(); pq.pop();
+        if(done[now.id]) continue;
+        done[now.id]=true;
+        for(int i=head[now.id];~i;i=edge[i].nxt){
+            int to=edge[i].to;
+            if(done[now.to]) continue;
+            if(acc[to]&&dis[to]>dis[now.id]+edge[i].w){
+                dis[to]=dis[now.id]+edge[i].w;
+                pq.push({dis[to],to});
+            }
+        }
+    }
+    return dis[n]<=b;
+}
+int main(){
+    cin>>n>>m>>b;
+    for(int i=1;i<=n;i++) {head[i]=-1,edge[i].nxt=-1;}
+    ll P=0;
+    for(int i=1;i<=n;i++){
+        cin>>fee[i];
+        R=max(fee[i],R);
+    }
+    for(int i=1;i<=m;i++){
+        ll u,v,w;
+        cin>>u>>v>>w;
+        add_edge(u,v,w); add_edge(v,u,w);
+    }
+    if(!solve(INF)){
+        cout<<"AFK"<<endl;
+        return 0;
+    }
+    L=max(fee[1],fee[n]);
+    while(L<=R){
+        ll mid=(L+R)>>1;
+        if(solve(mid)) R=mid-1;
+        else L=mid+1;
+    }
+    cout<<L<<endl;
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e3+10,M=1e5+10;
+const int INF=0x3f3f3f3f;
+struct edge{
+    int from,to,w;
+}edge[M];
+int mar[N][N]={0};
+int n,m;
+struct node{
+    int id,dis;
+    node(int a,int b){id=a;dis=b;}
+    bool operator < (const node &c) const
+    {return c.dis<dis;}
+};
+int dis[N]={0};
+bool vis[N]={false};
+void dijkstra(int s){
+    for(int i=1;i<=n;i++){
+        dis[i]=INF; vis[i]=false;
+    }
+    dis[s]=0;
+    priority_queue<node>pq;
+    pq.push(node(s,dis[s]));
+    while(!pq.empty()){
+        node now=pq.top(); pq.pop();
+        if(vis[now.id]) continue;
+        vis[now.id]=true;
+        for(int i=1;i<=n;i++){
+            if(!mar[now.id][i]) continue;
+            if(vis[i]) continue;
+            if(dis[i]>dis[now.id]+mar[now.id][i]){
+                dis[i]=dis[now.id]+mar[now.id][i];
+                pq.push(node(i,dis[i]));
+            }
+        }
+    }
+}
+int res=0;
+int main(){
+    cin>>n>>m;
+    memset(mar,0,sizeof(mar));
+    for(int i=1;i<=m;i++){
+        int u,v,w;
+        scanf("%d%d%d",&u,&v,&w);
+        edge[i].from=u; edge[i].to=v; edge[i].w=w;
+        mar[u][v]=min(w,mar[u][v]);
+    }
+    dijkstra(1);
+    for(int i=2;i<=n;i++){
+        res+=dis[i];
+    }
+    memset(mar,0,sizeof(mar));
+    for(int i=1;i<=m;i++){
+        mar[v][u]=min(w,mar[v][u]);
+    }
+    dijkstra(1);
+    for(int i=2;i<=n;i++){
+        res+=dis[i];
+    }
+    cout<<res;
+    return 0;
+}
+
+//I
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+struct edge{
+    int from,to,w;
+}edge[N*10];
+int head[N]={0},cnt=0;
+void add_edge(int u,int v){
+    edge[cnt].from=u; edge[cnt].to=v; edge[cnt].nxt=head[u];
+    head[u]=cnt++;
+}
+struct node{
+    int min_price,res;
+}dp[N];
+int price[N];
+bool vis[N]={false};
+int main(){
+    int n,m; cin>>n>>m;
+    for(int i=0;i<=n;i++){
+        head[i]=-1; edge[(i<<1)-1].nxt=edge[i<<1].nxt=-1;
+        vis[i]=true;
+    }
+    for(int i=1;i<=n;i++){
+        cin>>price[i];
+    }
+    for(int x,y,z;m,m--){
+        cin>>x>>y>>z;
+        add_edge(x,y); 
+        if(z==2) add_edge(y,x);
+    }
+    dp[1].min_price=price[1]; dp[1].res=0;
+    queue<int>q;
+    q.push(1); vis[1]=false;
+    while(!q.empty()){
+        int now=q.front(); q.pop();
+        for(int i=head[now];~i;i=edge[i].nxt){
+            int to=edge[i].to;
+            if(vis[to]){
+                vis[to]=false;
+                dp[to].res=max(dp[now].res,price[to]-dp[now].min_price);
+                dp[to].min_price=min(dp[now].min_price,price[to]);
+                q.push(to);
+            }
+            else{
+                if(dp[to].res<dp[now].res){
+                    dp[to].res=dp[now].res; q.push(to);
+                }
+                if(dp[to].min_price>dp[now].min_price){
+                    dp[to].min_price=dp[now].min_price;
+                    dp[to].res=max(dp[to].res,price[to]-dp[now].min_price);
+                    q.push(to);
+                }
+            }
+        }
+    }
+    cout<<dp[n].res;
+    return 0;
+}
+
+//J
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int,int> PII;
+const ll N=1e4+10,INF=0x3f3f3f3f;
+vector<PII>edge[N];
+priority_queue<PII,vector<PII>,greater<PII>>pq;
+bool check(ll x){
+    vector<bool>done(n+1);
+    vector<int>tim(n+1,INF);
+    pq.push({0,1});
+    while(!pq.empty()){
+        PII now=pq.top(); pq.pop();
+        if(now==n) return true;
+        done[now]=true;
+        for(auto [nxt,dis]:edge[now]){
+            if(done[nxt]) continue;
+            int nxt_ti=ti+(dis>x);
+            if(nxt_ti>k) continue;
+            if(tim[nxt]>nxt_ti){
+                tim[nxt]=nxt_ti;
+                pq.push({nxt,nxt_ti});
+            }
+        }
+    }
+    return false;
+}
+int main(){
+    int n,p,k;
+    int a,b; ll l,L=INF,R=0;
+    while(p--){
+        cin>>a>>b>>l;
+        edge[a].push_back({b,l});
+        edge[b].push_back({a,l});
+        L=min(L,l);
+        R=max(R,l);
+    }
+    if(!check(R)){
+        cout<<-1;
+        return 0;
+    }
+    while(L<=R){
+        ll mid=(L+R)>>1;
+        if(check(mid)) R=mid-1;
+        else L=mid+1;
+    }
+    cout<<L;
+    return 0;
+}
