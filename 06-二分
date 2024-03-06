@@ -1,0 +1,181 @@
+//06-二分
+
+//A
+#include <bits/stdc++.h>
+using namespace std;
+int n,m,a[1000005],x;
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=n;i++) cin>>a[i];
+    for(int i=1;i<=m;i++){
+        cin>>x;
+        int l=1,r=n,mid;
+        while(l<=r){
+            mid=(l+r)>>1;
+            if(a[mid]>=x) r=mid;
+            else l=mid+1;
+        }
+        if(a[l]==x) cout<<l;
+        else cout<<-1;
+    }
+    return 0;
+}
+
+//B
+#include <bits/stdc++.h>
+using namespace std;
+double a,b,c,d;
+double f(double x){
+    return a*x*x*x+b*x*x+c*x+d;
+}
+int main(){
+    scanf("%lf%lf%lf%lf".&a,&b,&c,&d);
+    for(int i=-100;i<100;i++){
+        double l=i,r=i+1,mid;
+        if(f(l)==0) {printf("%.2lf",l); continue;}
+        if(f(l)*f(r)<0){
+            while(r-l>=0.001){
+                mid=(l+r)/2;
+                if(f(mid)*f(l)<=0) r=mid;
+                else l=mid;
+            }
+            printf("%.2lf",l);
+        }
+    }
+    return 0;
+}
+
+//C
+#include <bits/stdc++.h>
+using namespace std;
+int n,a[50005],maxx,g;
+bool check(int x){
+    int pre=0,num=0;
+    for(int i=1;i<=n;i++){
+        if(a[i]-pre<x) num++;
+        else pre=a[i];
+    }return num<=g;
+}
+int main(){
+    cin>>maxx>>n>>g;
+    for(int i=1;i<=n;i++) cin>>a[i];
+    a[n+1]=maxx;
+    int l=1,r=maxx,mid,ans=-1;
+    while(l<=r){
+        mid=(l+r)>>1;
+        if(check(mid)) ans=mid; l=mid+1; 
+        else r=mid-1;
+    }
+    cout<<ans;
+    return 0;
+}
+
+//D
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+ll m;
+int n,a[1000005];
+bool check(int x){
+    ll num=0;
+    for(int i=1;i<=n;i++){
+        if(a[i]>x) num+=a[i]-x;
+    }return num<=m;
+}
+int main(){
+    scanf("%d%lld",&n,&m);
+    for(int i=1;i<=n;i++) scanf("%d",&a[i]);
+    int l=0,r=1e9,mid,ans=-1;
+    while(l<=r){
+        mid=(l+r)>>1;
+        if(check(mid)) ans=mid, l=mid+1;
+        else r=mid-1;
+    }
+    printf("%d",ans);
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+const int N=2e5+10,M=2e5+10;
+int n,m;
+int w[N],v[N];
+ll S,s[N],g[N];
+int x[M],y[M];
+ll get(int M){
+    for(int i=1;i<=n;i++){
+        s[i]=s[i-1]+v[i]*(w[i]>=W);
+        g[i]=g[i-1]+1*(w[i]>=W);
+    }
+    ll temp=0;
+    for(int i=1;i<=m;i++){
+        temp+=(s[y[i]-s[x[i]-1]])*(g[y[i]]-g[x[i]-1]);
+    }
+    return temp;
+}
+int main(){
+    scanf("%d%d%lld",&n,&m,&S);
+    for(int i=1;i<=n;i++) scanf("%d%d",&w[i],&v[i]);
+    for(int i=1;i<=m;i++){
+        scanf("%d%d",&x[i],&y[i]);
+    }
+    int l=0,r=1e6,mid; ll ans=1e18;
+    while(l<=r){
+        mid=(l+r)>>1;
+        ll res;
+        if(res<S) r=mid-1;
+        else l=mid+1;
+        ans=min(ans,abs(S-res));
+    }
+    printf("%lld",ans);
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+int n,m;
+int bz[N][20];
+int main(){
+    scanf("%d%d",&n,&m);
+    for(int i=1;i<=n;i++) scanf("%d",&bz[i][0]);
+    for(int j=1;j<=18;j++){
+        for(int i=1;i<=n;i++){
+            if(i+(1<<(j-1))<=n){
+                bz[i][j]=min(bz[i][j-1],bz[i+(1<<(j-1))][j-1]);
+            }
+        }
+    }
+    int l,r;
+    while(m--){
+        cin>>l>>r;
+        int p=log2(r-l+1);
+        printf("%d\n",max(bz[l][p],bz[r-(1<<p)+1][p]));
+    }
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+int n,m;
+int f[N][17],log_2[N];
+int main(){
+    scanf("%d%d",&n,&m);
+    for(int i=2;i<=n;i++) log_2[i]=log_2[i/2]+1;
+    for(int i=1;i<=n;i++) cin>>f[i][0];
+    for(int j=1;j<=16;j++){
+        for(int i=1;i+(1<<(j))-1<=n;i++){
+                f[i][j]=min(f[i][j-1],f[i+(1<<(j-1))][j-1]);
+        }
+    }
+    for(int l,r;m;m--){
+        cin>>l>>r;
+        int p=log_2[r-l+1];
+        printf("%d\n",min(f[l][p],f[r-(1<<p)+1][p]));
+    }
+    return 0;
+}
