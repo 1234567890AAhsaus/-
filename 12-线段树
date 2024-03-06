@@ -1,0 +1,225 @@
+
+//12-线段树
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N=1e5+10;
+const int INF=0x3f3f3f3f;
+ll aa[N]; ll tree[N*4]={0};
+inline int ls(int p) {return p<<1;}
+inline int rs(int p) {return p<<1|1;}
+void push_up(int p){
+    tree[p]=tree[ls(p)]+tree[rs(p)];
+}
+void build(int p,int pl,int pr){
+    if(pl==pr){
+        tree[p]={0};
+        return;
+    }
+    int mid=(pl+pr)>>1;
+    build(ls(p),pl,mid);
+    build(rs(p),mid+1,pr);
+    push_up(p);
+}
+void update(int p,int pl,int pr,int x,ll d){
+    if(pl==pr&&pl==x){
+        tree[p]+=d;
+        return;
+    }
+    int mid=(pl+pr)>>1;
+    if(x<=mid) update(ls(p),pl,mid,x,d);
+    else update(rs(p),mid+1,pr,x,d);
+    push_up(p);
+    return;
+}
+ll query(int p,int pl,int pr,int L,int R){
+    ll res=0;
+    if(L<=pl&&pr<=R) return tree[p];
+    int mid=(pl+pr)>>1;
+    if(L<=mid) res+=query(ls(p),pl,mid,L,R);
+    if(R>mid) res+=query(rs(p),mid+1,pr,L,R);
+    return res;
+}
+int main(){
+    int n,w; cin>>n>>w;
+    build(1,1,n);
+    string op;
+    ll a,b;
+    while(w--){
+        cin>>op>>a;
+        if(op=="x") update(1,1,n,a,b);
+        else cout<<query(1,1,n,a,b)<<endl;
+    }
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const ll N=1e5+5;
+const ll INF=0x3f3f3f3f;
+ll aa[N]; ll tree[N*4]={0}; ll tag[N<<2]={0};
+int ls(int p){return p<<1;}
+int rs(int p){return p<<1|1;}
+void push_up(int p){
+    tree[p]=tree[ls(p)]+tree[rs(p)];
+}
+void add_tag(int p,int pl,int pr,ll d){
+    tag[p]+=d;
+    tree[p]+=d*(pr-pl+1);
+}
+void push_down(int p,int pl,int pr){
+    if(tag[p]){
+        ll mid=(pl+pr)>>1;
+        add_tag(ls(p),pl,mid,tag[p]);
+        add_tag(rs(p),mid+1,pr,tag[p]);
+        tag[p]=0;
+    }
+}
+void build(int p,int pl,int pr){
+    if(pl==pr){
+        tree[p]=aa[pl];
+        return;
+    }
+    int mid=(pl+pr)>>1;
+    build(ls(p),pl,mid);
+    build(rs(p),mid+1,pr);
+    push_up(p);
+}
+void update(int p,int pl,int pr,ll L,ll R,ll d){
+    if(L<=pl&&pr<=R){
+        add_tag(p,pl,pr,d);
+        return;
+    }
+    push_down(p,pl,pr);
+    int mid=(pl+pr)>>1;
+    if(L<=mid) update(ls(p),pl,mid,L,R,d);
+    if(R>mid) update(rs(p),mid+1,pr,L,R,d);
+    push_up(p);
+    return;
+}
+ll query(int p,int pl,int pr,ll L,ll R){
+    if(L<=pl&&pr<=R) return tree[p];
+    push_down(p,pl,pr);
+    ll res=0;
+    ll mid=(pl+pr)>>1;
+    if(L<=mid) res+=query(ls(p),pl,mid,L,R);
+    if(R>mid) res+=query(rs(p),mid+1,pr,L,R);
+    return res;
+}
+int main(){
+    ll n,m; cin>>n>>m;
+    for(int i=1;i<=n;i++) cin>>aa[i];
+    build(1,1,n);
+    for(int i=1,temp,x,y,k;i<=m;i++){
+        cin>>temp;
+        switch(temp){
+            case 1:
+                cin>>x>>y>>k;
+                update(1,1,n,x,y,k);
+                break;
+            case 2:
+                cin>>x>>y;
+                cout<<query(1,1,n,x,y)<<endl;
+                break;
+        }
+    }
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N=1e5+10;
+const int INF=0x3f3f3f3f;
+ll n,T,MOD,MIN,MAX;
+ll sub[N]={0};
+int sum[N]={0};
+int main(){
+    cin>>n>>T>>MOD>>MIN>>MAX;
+    while(T--){
+        string S; cin>>S;
+        if(S=="A"){
+            ll L,R,X; cin>>L>>R>>X;
+            sub[L]+=X;
+            sub[R+1]-=X;
+        }
+        else{
+            int L,R; cin>>L>>R;
+            ll now=0,res=0;
+            for(int i=1;i<=n;i++){
+                now+=sub[i];
+                if(now>=MIN&&now<=MAX) res++;
+            }
+            cout<<res<<endl;
+        }
+    }
+    for(int i=1,now=0;i<=n;i++){
+        now+=sub[i];
+        ll temp=now*i%MOD;
+        if(MIN<=temp&&temp<=MAX) sum[i]=sum[i-1]+1;
+        else sum[i]=sum[i-1];
+    }  
+    int Final; cin>>Final;
+    while(Final--){
+        int L,R; cin>>L>>R;
+        cout<<sum[R]-sum[L-1]<<endl;
+    }
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+int C,S,W;
+const int N=6e4+10;
+int tree[N*4]={0};
+int tag[N<<2]={0};
+int ls(int p) {return p<<1;}
+int rs(int p) {return p<<1|1;}
+void push_up(int p){
+    tree[p]=max(tree[ls(p)],tree[rs(p)]);
+}
+void add_tag(int p,int pl,int pr,int d){
+    tag[p]+=d;
+    tree[p]+=d;
+}
+void push_down(int p,int pl,int pr){
+    if(tag[p]){
+        ll mid=(pl+pr)>>1;
+        add_tag(ls(p),pl,mid,tag[p]);
+        add_tag(rs(p),mid+1,pr,tag[p]);
+        tag[p]=0;
+    }
+}
+void update(int p,int pl,int pr,int L,int R,int d){
+    if(L<=pl&&pr<=R){
+        add_tag(p,pl,pr,d);
+        return;
+    }
+    push_down(p,pl,pr);
+    int mid=(pl+pr)>>1;
+    if(L<=mid) update(ls(p),pl,mid,L,R,d);
+    if(R>mid) update(rs(p),mid+1,pr,L,R,d);
+    push_up(p);
+    return;
+}
+int main(){
+    cin>>C>>S>>W;
+    int O,D,N;
+    while(W--){
+        cin>>O>>D>>N;
+        update(1,1,C-1,O,D-1,N);
+        if(tree[1]<=S) cout<<"T\n";
+        else{
+            cout<<"N\n";
+            update(1,1,C-1,1,O-1,-N);
+        }
+    }
+    return 0;
+}
