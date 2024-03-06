@@ -1,0 +1,232 @@
+//05-贪心
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+struct node{
+    int m,v;
+    double k;
+};
+struct cmp{
+    bool operator()(node a,node b){
+        if(x.k==y.k) return x.m<y.m;
+        return x.k<y.k;
+    }
+};
+priority_queue<node,vector<node>,cmp>pq;
+int main(){
+    int n,t; cin>>n>>t;
+    node temp;
+    for(int i=1;i<=n;i++){
+        cin>>temp.m>>temp.v;
+        temp.k=(double)temp.v/temp.m;
+        pq.push(temp);
+    }
+    double res=0;
+    while(t&&pq.size()){
+        if(t<pq.top().m){
+            res+=(double)t*pq.top().k; t=0;
+            break;
+        }
+        else{
+            t-=pq.top().m;
+            res+=pq.top().v;
+            pq.pop();
+        }
+    }
+    printf("%.2f",res);
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e6+10;
+struct node{
+    int a,b;
+}con[N];
+bool cmp(node x,node y){
+    if(x.b==y.b) return x.a<y.a;
+    return x.b<y.b;
+}
+int main(){
+    int res=0,last=0;
+    int n; cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>con[i].a>>con[i].b;
+    }
+    sort(con+1,con+n+1,cmp);
+    for(int i=1;i<=n;i++){
+        if(con[i].a>=last){
+            res++; last=con[i].b;
+        }
+    }
+    cout<<res;
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+int a[65];
+int main(){
+    int n; cin>>n;
+    int sum=0,res1=0,res2=0;
+    for(int i=1;i<=n;i++){
+        cin>>a[i];
+        sum+=a[i];
+    }
+    int L,R; cin>>L>>R;
+    if(sum<L*n||sum>R*n){
+        cout<<-1<<endl; return 0;
+    }
+    for(int i=1;i<=n;i++){
+        if(a[i]>R) res1+=a[i]-R;
+        else if(a[i]<L) res2+=L-a[i];
+    }
+    cout<<max(res1,res2);
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+const int N=2e5+10;
+const int INF=0x3f3f3f3f;
+int main(){
+    int n,m; cin>>n>>m;
+    int minn=INF,maxn=-INF;
+    long long sum=0;
+    if(m){
+        for(int i=1,temp;i<=n+m+1;i++){
+            cin>>temp;
+            minn=min(minn,temp); maxn=max(maxn,temp);
+            sum+=abs(temp);
+        }
+        if(minn>0) sum-=minn<<1;
+        if(maxn<0) sum+=maxn<<1;
+    }
+    else{
+        for(int i=1;i<=n+m+1;i++){
+            cin>>temp; sum+=temp;
+        }
+    }
+    cout<<sum;
+    return 0;
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+const int N=5e5+5;
+double a[N]={0};
+double pow2(double x){
+    return x*x;
+}
+int main(){
+    int n; double S;
+    cin>>n>>S;
+    for(int i=1;i<=n;i++) cin>>a[i];
+    sort(a+1,a+1+n);
+    double sum=0,ave=S/n;
+    for(int i=1;i<=n&&S;i++){
+        if(a[i]>=S/(n-i+1)){
+            sum+=pow2(S/(n-i+1)-ave)*(n-i+1); S=0; break;
+        }
+        S-=a[i]; sum+=pow2(a[i]-ave);
+    }
+    sum=sqrt(sum/n);
+    printf("%.4f",sum);
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e4+10;
+struct node{
+    int c,b,g,k;
+}a[N];
+int main(){
+    int n; cin>>n;
+    for(int i=1;i<=n;i++) cin>>a[i].c>>a[i].b>>a[i].g>>a[i].k;
+    int x,y; cin>>x>>y;
+    for(int i=n;i>=1;i--){
+        if(x>=a[i].c&&x<a[i].c+a[i].g&&y>=a[i].b&&y<a[i].b+a[i].k){
+            cout<<i; return 0;
+        }
+    }
+    cout<<-1;
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    string s; cin>>s;
+    bool flag=true;
+    char ver;
+    int k=0,b=0;
+    for(int i=0,f=1,last;;i++){
+        if(flag){
+            if(s[i]>='0'&&s[i]<='9'){
+                last=last*10+s[i]-'0';
+            }
+            else if(s[i]>='a'&&s[i]<='z'){
+                ver=s[i];
+                k+=last*f?last*f:1; f=1; last=0;
+            }
+            else{
+                b-=last*f? f=1; last=0;
+                if(s[i]=='-') f=-1;
+                if(s[i]=='=') flag=false;
+            }
+        }
+        else{
+            if(s[i]>='0'&&s[i]<='9'){
+                last=last*10+s[i]-'0';
+            }
+            else if(s[i]>='a'&&s[i]<='z'){
+                ver=s[i];
+                k-=last*f?last*f:1; f=1; last=0;
+            }
+            else{
+                b+=last*f? f=1; last=0;
+                if(s[i]=='-') f=-1;
+                if(s[i]=='\0') break; 
+            }
+        }
+    }
+    res=(double)b/k;
+    printf("%s=%.3f,ver,res);
+    return 0;
+}
+
+//H
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+int num[30]={0};
+int main(){
+    int k; cin>>k;
+    string s; cin>>s;
+    if(s.size()%k){
+        cout<<-1; return 0;
+    }
+    int len=s.size()/k;
+    long long res=0;
+    for(int i=0;i<len;i++){
+        memset(num,0,sizeof(num));
+        for(int j=0;j<k;j++){
+            num[s[j+i*len]-'a']++;
+        }
+        int max_num=0;
+        for(int j=0;j<26;j++){
+            if(num[j]>max_num) max_num=j;
+        }
+        res+=k-num[max_num];
+    }
+    cout<<res;
+    return 0;
+}
