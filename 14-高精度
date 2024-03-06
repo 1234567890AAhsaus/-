@@ -1,0 +1,33 @@
+14-高精度
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+char a1[5005],b1[5005];
+int a[5005],b[5005],c[5005];
+int len_a,len_b,len_c=1,x;
+memset(a,0,sizeof(a));
+memset(b,0,sizeof(b));
+memset(c,0,sizeof(c));
+scanf(“%s%s”,a1,a2);
+len_a=strlen(a1);
+len_b=strlen(a2);
+for(int i=0;i<len_a;i++) a[len_a-i]=a1[i]-‘0’;
+for(int i=0;i<len_b;i++) a[len_b-i]=b1[i]-‘0’;
+x=0;
+while(len_c<=len_a||len_c<=len_b){
+    c[len_c]=a[len_c]+b[len_c]+x;
+    x=c[len_c]/10;
+    c[len_c]%=10;
+    len_c++;
+}
+c[len_c]=x;
+if(c[len_c]==0){
+    len_c--;
+}
+for(int i=len_c;i>=1;i--){
+    cout<<c[i];
+}
+return 0;
+}
