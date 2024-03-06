@@ -1,0 +1,184 @@
+//09-动态规划
+
+//A
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+int ti[N],val[N];
+int main(){
+    int t,m; cin>>t>>m;
+    for(int i=1;i<=m;i++) cin>>ti[i]>>val[i];
+    int dp[N]={0};
+    for(int i=1;i<=m;i++){
+        for(int j=t;j>=ti[i];j--){
+            dp[j]=max(dp[j],dp[j-ti[i]]+val[i]);
+        }
+    }
+    cout<<dp[t];
+    return 0;
+}
+
+//B
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N=1e7+10;
+int ti[N],val[N];
+int main(){
+    int t,m; cin>>t>>m;
+    for(int i=1;i<=m;i++) cin>>ti[i]>>val[i];
+    int dp[N]={0};
+    for(int i=1;i<=m;i++){
+        for(int j=ti[i];j<=t;j++){
+            dp[j]=max(dp[j],dp[j-ti[i]]+val[i]);
+        }
+    }
+    cout<<dp[t];
+    return 0;
+}
+
+//C
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+ll dp[25][30001];
+ll dp2[25][30001];
+struct a{
+    ll value,imp,product;
+}goods[26];
+bool cmp(a x,a y){
+    if(x.imp!=y.imp) return x.imp>y.imp;
+    return x.value>y.value;
+}
+int main(){
+    int n,m,temp;
+    cin>>n>>m;
+    bool flag=true;
+    for(int i=1;i<=m;i++){
+        cin>>goods[i].value>>goods[i].imp;
+        goods[i].product=goods[i].value*goods[i].imp;
+    }
+    sort(goods+1,goods+m+1,cmp);
+    for(int i=1;i<=m&&flag;i++){
+        for(int j=0;j<=n&&flag;j++){
+            if(j<=goods[i].value){
+                dp[i][j]=dp[i-1][j];
+                dp2[i][j]=dp2[i-1][j];
+            }
+            else{
+                dp[i][j]=max(dp[i-1][j],dp[i-1][j-goods[i].value]+goods[i].product);
+                dp2[i][j]=max(dp2[i-1][j],dp2[i-1][j-goods[i].value]+goods[i].value);
+            }
+            if(dp2[i][j]==n) flag=false;
+        }
+    }
+    cout<<dp[m][n];
+    return 0;
+}
+
+//D
+#include<bits/stdc++.h>
+using namespace std;
+typedef pair<int,int> PII;
+int main(){
+    int m,s,t; cin>>m>>s>>t;
+    int now=0,dis=0;
+    while(m>=10&&now<t){
+        dis+=60; now++; m-=10;
+        if(dis>=s){
+            cout<<"Yes\n"<<now; return 0;
+        }
+    }
+    if(now>=t){
+        cout<<"No\n"<<dis; return 0;
+    }
+    PII run={dis,m},magic={dis,m};
+    while(now<=t){
+        if(magic.second>=10){
+            magic.first+=60; magic.second-=10;
+        }
+        else magic.second+=4;
+        run.first+=60;
+        now++;
+        if(run.first<magic.first) run=magic;
+        if(run.first>=s){
+            cout<<"Yes\n"<<now; return 0;
+        }
+        if(now>=t){
+            cout<<"No\n"<<run.first; return 0;
+        }
+    }
+    cout<<"No\n"<<run.first;
+    return 0;
+}
+
+//E
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+    queue<int>q; set<int>st;
+    int n; cin>>n;
+    for(int i=1,temp;i<=n;i++){
+        cin>>temp;
+        for(auto w:st){
+            q.push(w+temp);
+            if(w-temp) q.push(abs(w-temp));    
+        }   
+        while(q.size()){
+            st.insert(q.front()); q.pop();
+        }
+        st.insert(temp);
+    }
+    cout<<st.size();
+    return 0;
+}
+
+//F
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+struct node{
+    int lose,win,use;
+}a[N];
+int dp[N]={0};
+int main(){
+    int n,x; cin>>n>>x;
+    for(int i=1;i<=n;i++) cin>>a[i].lose>>a[i].win>>a[i].use;
+    for(int i=1;i<=n;i++){
+        for(int j=x;j>=0;j--){
+            if(j>=a[i].use){
+                dp[j]=max(dp[j]+a[i].lose,dp[j-a[i].use]+a[i].win);
+            }
+            else{
+                dp[j]=max(dp[j],dp[j]+a[i].lose);
+            }
+        }
+    }
+    cout<<(long long)dp[x]*5;
+    return 0;
+}
+
+//G
+#include<bits/stdc++.h>
+using namespace std;
+int ans;
+int dp[31][10];
+int main(){
+    dp[0][0]=1;
+    for(int i=1;i<=30;i++){
+        for(int j=0;j<=9;j++){
+            if(j!=0){
+                dp[i][j]=dp[i-1][j-1];
+            }else{
+                for(int p=0;p<=9;p++){
+                    dp[i][j]+=dp[i-1][p];
+                }
+            }
+        }
+    }
+    for(int i=0;i<=30;i++){
+        ans+=dp[i][7];
+    }
+    cout<<ans;
+    return 0;
+}
